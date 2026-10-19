@@ -204,6 +204,13 @@ footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rul
 .mile { font-size: 13px; padding: 6px 8px; border-radius: 4px; background: var(--warn-soft); color: var(--warn); }
 .mile.res { background: var(--accent-soft); color: var(--accent); }
 .totals { font: 13px var(--mono); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.cat .desc { font-size: 12.5px; color: var(--muted); margin-top: 2px; max-width: 56ch; }
+.math { font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 3px; white-space: nowrap; }
+.math-L { background: var(--accent-soft); color: var(--accent); }
+.math-M { background: var(--warn-soft); color: var(--warn); }
+.math-H { background: var(--bad-soft); color: var(--bad); }
+.plan-legend { display: grid; gap: 6px; font-size: 13px; color: var(--muted); background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 10px 12px; }
+.facts { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -346,6 +353,18 @@ footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rul
     </article>
   </div>
 
+  <div class="callout" id="transfer">
+    <h3>Can your UNCW master's count toward a CSU PhD? Very likely yes, as a lump sum.</h3>
+    <p>CSU has two transfer routes. Only the first fits you:</p>
+    <ul class="facts">
+      <li><strong>Lump-sum credit for a completed master's (your route).</strong> Doctoral students "may request lump-sum credit from a previously awarded master's degree" on the Graduate School's GS3 form. The SE PhD allows up to <strong>30 credits</strong> of "an applicable master's degree" toward depth, elective and dissertation credits. The CS PhD also allows up to 30, and the Computer Engineering PhD has a track built for students with an MS.</li>
+      <li><strong>Individual courses.</strong> Courses must be graded B or better, taken within 10 years, at CSU's 500 level, and from a regionally accredited university. They also <em>cannot</em> have counted toward a previous degree, so your MS courses can't go this way. Only extra graduate courses outside your MS could.</li>
+      <li><strong>UNCW qualifies:</strong> it is accredited by SACSCOC, one of the regional accreditors, and was reaffirmed in Dec 2023. Your MS will be awarded in Dec 2026, before the Fall 2027 start.</li>
+      <li><strong>Not automatic:</strong> your advisor and the Graduate School must both approve, the program decides whether the MS is "applicable", and an official UNCW transcript must be on file. A decision comes within 30 days. You file after admission, through RAMweb.</li>
+    </ul>
+    <p class="muted" style="font-size:13px">If approved, about 42 credits remain at CSU for the SE PhD: SYSE 701, the dissertation, and a few courses (the "must-take" ones in the plan below).</p>
+  </div>
+
 </section>
 
 <section aria-labelledby="cat">
@@ -366,15 +385,18 @@ footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rul
     <div class="field"><label class="eyebrow" for="f-term">Term</label>
       <select id="f-term"><option value="">Any</option><option>Fall</option><option>Spring</option><option>Summer</option></select></div>
     <div class="field"><label class="eyebrow" for="f-q">Search</label><input id="f-q" type="search" placeholder="e.g. machine learning"></div>
+    <div class="field"><label class="eyebrow" for="f-math">Math load</label>
+      <select id="f-math"><option value="">Any</option><option value="L">Low only</option><option value="LM">Low or medium</option></select></div>
     <label class="field check" for="f-fit"><input id="f-fit" type="checkbox"> Strong fit only</label>
     <span class="count" id="f-count" aria-live="polite"></span>
   </div>
   <div class="tablewrap cat">
     <table>
-      <thead><tr><th>Code</th><th>Title</th><th>Cr</th><th>Offered</th><th>SE PhD</th><th>CS PhD</th><th>CompE PhD</th><th>Fit for you</th></tr></thead>
+      <thead><tr><th>Code</th><th>Course · what it teaches</th><th>Cr</th><th>Offered</th><th>Math</th><th>SE PhD</th><th>CS PhD</th><th>CompE PhD</th><th>Fit for you</th></tr></thead>
       <tbody id="cat-body"></tbody>
     </table>
   </div>
+  <p class="muted" style="font-size:13px"><strong>Math load</strong> is my estimate from each course's catalog description and prerequisites. <em>Low</em>: conceptual or applied, light math. <em>Medium</em>: statistics or linear algebra used as tools. <em>High</em>: derivations or proofs, heavy calculus, probability theory or physics. The one-line descriptions are paraphrased from the CSU catalog.</p>
   <p class="muted" style="font-size:13px">"Elective*" = counts as an SE technical elective with advisor approval. "Outside" = counts toward the CS PhD's 3-credit outside requirement. The Computer Engineering PhD accepts any 500+ CS, ECE, MATH or PH course. "(odd years)" means 2027, 2029… The catalog lists when a course is <em>planned</em>, so check the actual schedule each term. Prerequisites listed for undergraduates (e.g., CS 440 before CS 545) are usually handled by instructor consent for graduate students. Confirm for the courses you want. "—" means the catalog lists no term.</p>
 </section>
 
@@ -550,7 +572,7 @@ footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rul
   <h2 id="qs"><span class="n">09</span>Open questions to ask CSU</h2>
   <ol class="qs">
     <li><div><strong>Does the UNCW–CSU MOU funding cover only the SE PhD, or also the CS and Computer Engineering PhDs?</strong><div class="to">Ask: SE department and the UNCW MOU contact</div></div></li>
-    <li><div><strong>Does an MS in Computer Science &amp; Information Systems count as an "applicable master's" for the 30-credit transfer?</strong> If it does, about 42 credits remain at CSU.<div class="to">Ask: SE department</div></div></li>
+    <li><div><strong>Will SE accept my UNCW MS in Computer Science &amp; Information Systems for the 30-credit lump-sum transfer (GS3), and which requirements will those credits replace (depth, electives or dissertation)?</strong> If yes, about 42 credits remain at CSU.<div class="to">Ask: SE department</div></div></li>
     <li><div><strong>Can a CS faculty member (e.g., Blanchard) co-advise or sit on the committee of an SE PhD?</strong><div class="to">Ask: SE department</div></div></li>
     <li><div><strong>For international applicants, is Jul 1 realistic for an August start, given I-20 and visa timelines? Is there an earlier recommended date?</strong><div class="to">Ask: SE department and CSU Graduate School</div></div></li>
     <li><div><strong>Is the GRE or an English test required for the SE PhD, or waived with a US master's?</strong> The CS PhD requires the GRE; the SE checklist didn't mention it.<div class="to">Ask: SE department</div></div></li>
@@ -582,148 +604,151 @@ footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rul
 </div>
 
 <script>
-/* CSU General Catalog course data (checked 2026-10-19). [code, title, credits, terms, lists, fit]
-   lists: SE = SE PhD depth menu; G1/G2/G3 = CS PhD breadth groups. fit: 2 strong, 1 related, 0 other. */
 var COURSES = [
-['SYSE 501','Foundations of Systems Engineering','3','Fall, Spring','SE',1],
-['SYSE 505','Systems Thinking for the Real World','3','Spring','SE',0],
-['SYSE 511','Control Engineering for System Engineers','3','Spring (odd years)','SE',0],
-['SYSE 512','Systems Sensing and Imaging Analysis','3','Spring','SE',2],
-['SYSE 521','Applied AI Projects in Systems Engineering','3','Fall','',2],
-['SYSE 530','Overview of Systems Engineering Processes','3','Fall, Spring','SE',1],
-['SYSE 532','Dynamics of Complex Engineering Systems','3','Fall','SE',1],
-['SYSE 534','Human Systems Integration','3','Spring','SE',2],
-['SYSE 536','Space Mission Analysis and Design','3','Fall','SE',0],
-['SYSE 541','Engineering Data Design and Visualization','3','Fall','SE',2],
-['SYSE 544','Systems-Based AR/VR Environmental Realism','3','Fall','SE',0],
-['SYSE 545','Augmented/Virtual Reality Systems Development','3','Spring','SE',0],
-['SYSE 548','Security Engineering for Systems Engineers','3','Spring (even years)','SE',1],
-['SYSE 549','Secure Vehicle and Industrial Networking','3','Spring','SE',2],
-['SYSE 551','Sustainable Systems Engineering','3','Fall','',0],
-['SYSE 552','Humanitarian Engineering','3','—','',0],
-['SYSE 555','Transitions in Energy Systems','3','Fall','SE',0],
-['SYSE 560','Distributed Generation Systems','3','Fall (odd years)','',0],
-['SYSE 567','Systems Engineering Architecture','3','Fall','SE',1],
-['SYSE 569','Cybersecurity Awareness for Systems Engineers','3','Spring, Summer','SE',1],
-['SYSE 571','Analytics in Systems Engineering','3','Fall','SE',2],
-['SYSE 573','Cost Optimization for Systems Engineers','3','Spring','SE',0],
-['SYSE 574','AI-Augmented Systems Engineering','3','Spring','',2],
-['SYSE 602','Systems Requirements Engineering','3','Fall','SE',0],
-['SYSE 603','Introduction to Systems Test and Evaluation','3','Spring','SE',0],
-['SYSE 630','Field Coupled Systems','3','Fall (even years)','',0],
-['SYSE 667','Advanced Model-Based Systems Engineering','3','Spring','SE',0],
-['SYSE 701','Research Methods in Systems Engineering','3','Spring','SE',1],
-['SYSE 710','Leadership/Innovation in Systems Engineering','3','Fall, Spring','',0],
-['SYSE 711','Ethics in Systems Engineering','1','Fall, Spring','',0],
-['ENGR 502','Engineering Project and Program Management','3','Fall, Spring','SE',0],
-['ENGR 510','Engineering Optimization: Method/Application','3','Fall','SE',0],
-['ENGR 520','Intelligent Decision Support Systems','3','Spring','SE',2],
-['ENGR 522','Object-Oriented GIS Programming for Engineers','3','Fall','',0],
-['ENGR 525','Intellectual Property and Invention Systems','3','Spring','SE',0],
-['ENGR 531','Engineering Risk and Reliability Analysis','3','Fall, Spring','SE',1],
-['ENGR 533','Spaceflight and Biological Systems','3','Fall (odd years)','SE',0],
-['ENGR 535','Modeling Human Systems Behavior','3','Fall','SE',2],
-['ENGR 537','Spaceflight Experimentation and Commerce','3','—','',0],
-['ENGR 540','Design Analysis of Engineering Experiments','3','Spring','SE',2],
-['ENGR 546','AR/VR Biometrics and Sensing for Training','3','Summer','SE',1],
-['ENGR 550','Numerical Methods in Science and Engineering','3','Fall, Spring','',0],
-['ENGR 565','Electrical Power Engineering','3','Fall (odd years)','SE',0],
-['ENGR 570','Coupled Electromechanical Systems','3','Fall','SE',0],
-['ENGR 572','AI-Augmented Engineering Management','3','—','',1],
-['ENGR 665','Stochastic Simulation in Engineering Applications','3','Spring','',1],
-['ENGR 667','Advanced Model-Based Systems Engineering','3','Spring','',0],
-['MECH 513','Simulation Modeling and Experimentation','3','—','SE',0],
-['CS 501','Introduction to Research in Computer Science','1','Fall, Spring, Summer','',1],
-['CS 510','Image Computation','4','Spring','G1',2],
-['CS 514','Software Product and Process Evaluation','4','Fall','G3',0],
-['CS 520','Analysis of Algorithms','4','Spring','G1',0],
-['CS 522','Foundations of Cyber-Physical Systems','4','Spring','G1',0],
-['CS 523','Foundations of Computation','4','Fall','G1',0],
-['CS 525','Bioinformatics Algorithms','4','—','G1',0],
-['CS 528','Embedded Systems and Machine Learning','4','Fall','',1],
-['CS 530','Fault-Tolerant Computing','4','Spring','G2',0],
-['CS 533','Database Management Systems','4','Fall','G3',1],
-['CS 535','Big Data','4','Fall','G2',2],
-['CS 540','Artificial Intelligence','4','Spring','G1',2],
-['CS 542','Natural Language Processing','4','Fall','G1',2],
-['CS 545','Machine Learning','4','Fall','G1',2],
-['CS 553','Algorithmic Language Compilers','4','Fall','G2',0],
-['CS 555','Distributed Systems','4','Fall','G2',1],
-['CS 556','Computer Security','4','Fall','G3',1],
-['CS 557','Advanced Networking','4','Spring','G2',0],
-['CS 559','Quantitative Security','4','Fall','G3',0],
-['CS 560','Foundations of Fine-Grain Parallelism','4','Spring','G2',0],
-['CS 561','Hardware/Software Design of Embedded Systems','4','Spring (even years)','',0],
-['CS 567','3D User Interfaces','4','Fall','G3',1],
-['CS 570','Advanced Computer Architecture','4','—','G2',0],
-['CS 575','Parallel Processing','4','Fall','G2',0],
-['CS 658','Internet Engineering','4','Fall (even years)','',0],
-['CS 793','Research Seminar in Computer Science','4','Fall, Spring','',1],
-['ECE 502','Advanced Fourier Optics','4','Spring','',0],
-['ECE 503','Ultrafast Optics','3','Spring (even years)','',0],
-['ECE 504','Physical Optics','3','Fall (odd years)','',0],
-['ECE 506','Optical Interferometry and Laser Metrology','3','Fall (odd years)','',0],
-['ECE 507','Plasma Physics and Applications','3','Spring (odd years)','',0],
-['ECE 512','Digital Signal Processing','3','Fall','',1],
-['ECE 513','Digital Image Processing','3','Spring','',2],
-['ECE 514','Applications of Random Processes','3','Fall','',1],
-['ECE 516','Information Theory','3','Fall','',0],
-['ECE 517','Advanced Optical Imaging','3','—','',0],
-['ECE 518','Biophotonics','3','—','',0],
-['ECE 519','Network Centric Systems','3','Spring (even years)','',0],
-['ECE 520','Optimization Methods: Control and Communication','3','Spring','',0],
-['ECE 521','Satellite Communication','3','Spring (odd years)','',0],
-['ECE 522','Random Walks','3','Fall (even years)','',0],
-['ECE 526','Biological Physics','3','Fall (odd years)','',0],
-['ECE 527A–F','Biosensing modules (six 1-credit modules)','1 each','—','',0],
-['ECE 528','Embedded Systems and Machine Learning','4','Fall','',1],
-['ECE 529','Signal Processing and Artificial Intelligence','3','Spring (odd years)','',2],
-['ECE 532','Dynamics of Complex Engineering Systems','3','Fall','SE',1],
-['ECE 534','Analog Integrated Circuit Design','4','—','',0],
-['ECE 536','RF Integrated Circuit Design','3','Fall (every third year)','',0],
-['ECE 537','Biomedical Signal Processing','3','—','',2],
-['ECE 538','Design/Analysis of Analog-Digital Interface','4','—','',0],
-['ECE 539','Digital Communications','3','Spring (even years)','',0],
-['ECE 540','Computational Electromagnetics','3','—','',0],
-['ECE 541','Applied Electromagnetics','3','Fall (even years)','',0],
-['ECE 544','Silicon Photonics for Computing Systems','3','Fall','',0],
-['ECE 546','Laser Fundamentals and Devices','3','Spring (even years)','',0],
-['ECE 548','Microwave Theory and Component Design','3','Spring (odd years)','',0],
-['ECE 549','Radar Systems and Design','3','Spring (even years)','',0],
-['ECE 553','Adaptive Systems and Machine Learning','3','Spring','',2],
-['ECE 554','Computer Architecture','3','Spring (odd years)','',0],
-['ECE 555','Advanced Robotics: Redundancy and Optimization','3','Spring (even years)','',1],
-['ECE 556','AI for Radar and Remote Sensing','3','Spring','',1],
-['ECE 559','Machine Learning in Imaging and Spectroscopy','3','Fall (even years)','',2],
-['ECE 560','Foundations of Fine-Grain Parallelism','4','—','',0],
-['ECE 561','Hardware/Software Design of Embedded Systems','4','Spring (even years)','',0],
-['ECE 562','Power Electronics I','3','Spring (even years)','',0],
-['ECE 563','Introduction to Power System Markets','3','Spring (even years)','',0],
-['ECE 564','Semiconductor Memory','3','Spring','',0],
-['ECE 565','Electrical Power Engineering','3','Fall (odd years)','SE',0],
-['ECE 566','Grid Integration of Renewable Energy Systems','3','Spring (odd years)','SE',0],
-['ECE 568','Communication Systems in Smart Grids','3','Spring (even years)','',0],
-['ECE 570','Microgrids','3','Spring (odd years)','',0],
-['ECE 571','VLSI System Design','4','Spring','',0],
-['ECE 572','Semiconductor Transistors','1','—','',0],
-['ECE 573','Semiconductor Optoelectronics Laboratory','3','—','',0],
-['ECE 574','Optical Properties in Solids','3','Spring (even years)','',0],
-['ECE 578','Satellite Data Analysis','3','Fall (odd years)','',1],
-['ECE 579','Global Navigation Satellite Systems','3','—','',0],
-['ECE 604','Nonlinear Optics','3','—','',0],
-['ECE 611','Nonlinear Control Systems','3','Fall (even years)','',0],
-['ECE 641','Electromagnetics','3','—','',0],
-['ECE 650','Extreme Ultraviolet and Soft X-Ray Radiation','3','—','',0],
-['ECE 652','Estimation and Filtering Theory','3','—','',1],
-['ECE 653','Detection Theory','3','—','',0],
-['ECE 658','Internet Engineering','4','Fall (even years)','',0],
-['ECE 666','Topics in Robotics','3','Spring (odd years)','',1],
-['ECE 669','Emerging Topics in AI for Power Systems','3','Fall (even years)','',0],
-['ECE 673','Thin Film Growth','3','Spring (odd years)','',0],
-['ECE 742','Topics in Electromagnetics','3','—','',0],
-['ECE 752','Topics in Signal Processing','3','—','',0],
-['ECE 777','X-Ray Lasers','3','—','',0]
+/* [code, title, credits, terms, lists, fit, math, what it teaches]
+   lists: SE = SE PhD depth menu; G1/G2/G3 = CS PhD breadth groups. fit: 2 strong, 1 related, 0 other.
+   math: L = low (conceptual/applied), M = medium (stats, linear algebra as tools), H = high (derivations, proofs, heavy calculus/probability). */
+['SYSE 501','Foundations of Systems Engineering','3','Fall, Spring','SE',1,'L','The core ideas of systems engineering and the system life cycle, applied to practical problems.'],
+['SYSE 505','Systems Thinking for the Real World','3','Spring','SE',0,'L','Systems-thinking language, tools and frameworks for untangling complex real-world issues.'],
+['SYSE 511','Control Engineering for System Engineers','3','Spring (odd years)','SE',0,'H','Survey of control methods (linear, nonlinear, optimal, robust, hierarchical). Needs a controls course and linear algebra.'],
+['SYSE 512','Systems Sensing and Imaging Analysis','3','Spring','SE',2,'M','Turning physical signals into digital data (sampling, filtering), then image restoration, analysis and classification for inspection, authentication and biometrics.'],
+['SYSE 521','Applied AI Projects in Systems Engineering','3','Fall','',2,'L','Project course using ML, NLP and computer vision across the systems life cycle: design, implementation, verification.'],
+['SYSE 530','Overview of Systems Engineering Processes','3','Fall, Spring','SE',1,'M','The systems engineering process and analysis techniques, including reliability and robustness. Assumes a statistics course.'],
+['SYSE 532','Dynamics of Complex Engineering Systems','3','Fall','SE',1,'M','How behavior emerges from interacting parts in complex socio-technical systems.'],
+['SYSE 534','Human Systems Integration','3','Spring','SE',2,'L','Designing and evaluating systems around human capabilities and limits, for safety, usability and cost.'],
+['SYSE 536','Space Mission Analysis and Design','3','Fall','SE',0,'M','Engineering a system with a space element: architecture options, operations and stakeholder needs.'],
+['SYSE 541','Engineering Data Design and Visualization','3','Fall','SE',2,'L','Aggregating, filtering and exploring engineering data, and communicating patterns and findings visually.'],
+['SYSE 544','Systems-Based AR/VR Environmental Realism','3','Fall','SE',0,'L','Making AR/VR environments realistic and verifiable, with examples from manufacturing, space and healthcare.'],
+['SYSE 545','Augmented/Virtual Reality Systems Development','3','Spring','SE',0,'L','Designing and building social AR/VR learning experiences with a systems approach.'],
+['SYSE 548','Security Engineering for Systems Engineers','3','Spring (even years)','SE',1,'M','Secure design from attacker case studies: threat analysis, protocols, cryptography, access control, side channels.'],
+['SYSE 549','Secure Vehicle and Industrial Networking','3','Spring','SE',2,'M','Secure communication on vehicle and industrial networks: CAN, SAE J1939, diagnostics, framing, cryptography. Daily\'s area.'],
+['SYSE 551','Sustainable Systems Engineering','3','Fall','',0,'L','Analyzing interlinked systems through a sustainability lens: life-cycle analysis, system-of-systems, resilience.'],
+['SYSE 552','Humanitarian Engineering','3','—','',0,'L','Engineering solutions for developing and vulnerable communities, including emergency response.'],
+['SYSE 555','Transitions in Energy Systems','3','Fall','SE',0,'L','Technical, economic and policy shifts shaping future energy systems.'],
+['SYSE 560','Distributed Generation Systems','3','Fall (odd years)','',0,'H','Modeling and simulating inverter-based generation: batteries, solar, wind. Needs differential equations and circuits.'],
+['SYSE 567','Systems Engineering Architecture','3','Fall','SE',1,'L','Classifying and evaluating system architectures through design studies.'],
+['SYSE 569','Cybersecurity Awareness for Systems Engineers','3','Spring, Summer','SE',1,'L','Cybersecurity principles and terminology needed to build security into system designs.'],
+['SYSE 571','Analytics in Systems Engineering','3','Fall','SE',2,'M','Applying data mining, analytics and "big data" methods to large, complex intelligent systems.'],
+['SYSE 573','Cost Optimization for Systems Engineers','3','Spring','SE',0,'M','Optimizing cost across requirements, design, development and manufacturing decisions.'],
+['SYSE 574','AI-Augmented Systems Engineering','3','Spring','',2,'L','Using ML, neural networks and generative AI to support engineers, including architecture and ethics.'],
+['SYSE 602','Systems Requirements Engineering','3','Fall','SE',0,'L','Writing, decomposing, tracking and verifying system requirements.'],
+['SYSE 603','Introduction to Systems Test and Evaluation','3','Spring','SE',0,'M','Testing systems at component and system level, and why systems succeed or fail.'],
+['SYSE 630','Field Coupled Systems','3','Fall (even years)','',0,'H','Energy and forces in magnetically and electrically coupled systems via Lagrangian methods and state-space models.'],
+['SYSE 667','Advanced Model-Based Systems Engineering','3','Spring','SE',0,'L','Formal system architecture modeling (MBSE).'],
+['SYSE 701','Research Methods in Systems Engineering','3','Spring','SE',1,'L','Introduction to systems engineering research and PhD program expectations. Required for the SE PhD.'],
+['SYSE 710','Leadership/Innovation in Systems Engineering','3','Fall, Spring','',0,'L','Leadership and research skills for an applied practicum. D.Eng only; not for SE PhD credit.'],
+['SYSE 711','Ethics in Systems Engineering','1','Fall, Spring','',0,'L','Ethical principles applied to systems engineering (online, 1 credit).'],
+['ENGR 502','Engineering Project and Program Management','3','Fall, Spring','SE',0,'L','Program planning and control, risk assessment, work breakdown structures and costing.'],
+['ENGR 510','Engineering Optimization: Method/Application','3','Fall','SE',0,'H','Linear, integer and quadratic programming, network flows and interior-point methods.'],
+['ENGR 520','Intelligent Decision Support Systems','3','Spring','SE',2,'M','Decision analysis and AI decision aids: multi-objective analysis, modeling human behavior, decisions under uncertainty.'],
+['ENGR 522','Object-Oriented GIS Programming for Engineers','3','Fall','',0,'L','Building custom GIS desktop applications in C# and .NET.'],
+['ENGR 525','Intellectual Property and Invention Systems','3','Spring','SE',0,'L','How inventing and patenting work in engineering and technology.'],
+['ENGR 531','Engineering Risk and Reliability Analysis','3','Fall, Spring','SE',1,'M','Qualitative and quantitative risk analysis and modeling, and quantifying system reliability.'],
+['ENGR 533','Spaceflight and Biological Systems','3','Fall (odd years)','SE',0,'L','How spaceflight and gravity changes affect the body\'s biological systems.'],
+['ENGR 535','Modeling Human Systems Behavior','3','Fall','SE',2,'M','Quantitative methods and theory for modeling human behavior in engineering systems and decisions.'],
+['ENGR 537','Spaceflight Experimentation and Commerce','3','—','',0,'L','Running experiments in space, plus their commercial, IP, security and analytics aspects.'],
+['ENGR 540','Design Analysis of Engineering Experiments','3','Spring','SE',2,'M','Designing experiments and modeling the data: ANOVA, factorial designs, regression, response surfaces.'],
+['ENGR 546','AR/VR Biometrics and Sensing for Training','3','Summer','SE',1,'L','Biometrics and sensors combined with AR/VR to train people for dangerous environments.'],
+['ENGR 550','Numerical Methods in Science and Engineering','3','Fall, Spring','',0,'H','Finite elements, finite differences and spectral methods for PDEs, with stability and convergence analysis.'],
+['ENGR 565','Electrical Power Engineering','3','Fall (odd years)','SE',0,'H','Power-system analysis (current, voltage, real and reactive power) with computer tools.'],
+['ENGR 570','Coupled Electromechanical Systems','3','Fall','SE',0,'H','Energy transfer between coupled electrical and mechanical systems.'],
+['ENGR 572','AI-Augmented Engineering Management','3','—','',1,'L','AI in engineering management: prompt engineering, human vs AI output, organizational and ethical impact.'],
+['ENGR 665','Stochastic Simulation in Engineering Applications','3','Spring','',1,'H','Probabilistic modeling of uncertainty, stochastic simulation and Bayesian model updating.'],
+['ENGR 667','Advanced Model-Based Systems Engineering','3','Spring','',0,'L','Formal system architecture modeling (same content as SYSE 667).'],
+['MECH 513','Simulation Modeling and Experimentation','3','—','SE',0,'M','Description not retrieved from the catalog.'],
+['CS 501','Introduction to Research in Computer Science','1','Fall, Spring, Summer','',1,'L','Skills for graduate research: presenting, writing and reading papers.'],
+['CS 510','Image Computation','4','Spring','G1',2,'M','Image generation and interpretation: rendering, ray tracing, geometric transforms, image manipulation.'],
+['CS 514','Software Product and Process Evaluation','4','Fall','G3',0,'L','Software process modeling, metrics, testing and verification.'],
+['CS 520','Analysis of Algorithms','4','Spring','G1',0,'H','Asymptotic and problem complexity, the Master Method, parallel algorithms. Proof-based.'],
+['CS 522','Foundations of Cyber-Physical Systems','4','Spring','G1',0,'H','Formal design, specification and analysis of cyber-physical systems.'],
+['CS 523','Foundations of Computation','4','Fall','G1',0,'H','Automata, regular expressions and computability theory. Proof-based.'],
+['CS 525','Bioinformatics Algorithms','4','—','G1',0,'M','Algorithms and deep learning for DNA, protein and other biological data.'],
+['CS 528','Embedded Systems and Machine Learning','4','Fall','',1,'M','Machine learning on embedded hardware: hardware/software optimization and accelerators.'],
+['CS 530','Fault-Tolerant Computing','4','Spring','G2',0,'M','Building reliable systems: fault models, testing, reliability evaluation, redundancy.'],
+['CS 533','Database Management Systems','4','Fall','G3',1,'M','How databases work inside: concurrency control, recovery, query processing.'],
+['CS 535','Big Data','4','Fall','G2',2,'M','Scalable computing models, large-scale data storage frameworks and optimization for big data.'],
+['CS 540','Artificial Intelligence','4','Spring','G1',2,'M','Knowledge representation, search, planning, evolutionary computation and data mining.'],
+['CS 542','Natural Language Processing','4','Fall','G1',2,'M','Concepts, mathematical foundations and algorithms of NLP.'],
+['CS 545','Machine Learning','4','Fall','G1',2,'M','How computers learn: neural networks, decision trees, genetic algorithms and more. Uses linear algebra and probability.'],
+['CS 553','Algorithmic Language Compilers','4','Fall','G2',0,'M','Building compilers: scanners, parsers, dataflow analysis, optimization.'],
+['CS 555','Distributed Systems','4','Fall','G2',1,'M','Principles, protocols and algorithms behind modern distributed systems.'],
+['CS 556','Computer Security','4','Fall','G3',1,'M','Threats, access-control models, trusted systems, cryptography and authentication.'],
+['CS 557','Advanced Networking','4','Spring','G2',0,'M','Core internet protocols (transport, routing, security) and protocol design.'],
+['CS 559','Quantitative Security','4','Fall','G3',0,'M','Measuring security risk with data-based and statistical analysis.'],
+['CS 560','Foundations of Fine-Grain Parallelism','4','Spring','G2',0,'M','Programming new architectures: performance tuning and automatic parallelization.'],
+['CS 561','Hardware/Software Design of Embedded Systems','4','Spring (even years)','',0,'M','Embedded system design: modeling, design-space exploration, hardware/software partitioning.'],
+['CS 567','3D User Interfaces','4','Fall','G3',1,'L','Theory and design of 3D user interaction: selection, manipulation, navigation.'],
+['CS 570','Advanced Computer Architecture','4','—','G2',0,'M','Description not retrieved from the catalog.'],
+['CS 575','Parallel Processing','4','Fall','G2',0,'M','Parallel and distributed computing models, algorithms and performance.'],
+['CS 658','Internet Engineering','4','Fall (even years)','',0,'M','Link technologies, multiple access, routing, switching and flow control.'],
+['CS 793','Research Seminar in Computer Science','4','Fall, Spring','',1,'L','Research methods in a specific CS area, usually with your advisor\'s group.'],
+['ECE 502','Advanced Fourier Optics','4','Spring','',0,'H','Optical systems for signal and information processing using Fourier optics.'],
+['ECE 503','Ultrafast Optics','3','Spring (even years)','',0,'H','Generating, amplifying and shaping ultrashort laser pulses.'],
+['ECE 504','Physical Optics','3','Fall (odd years)','',0,'H','Classical optics from electromagnetic first principles.'],
+['ECE 506','Optical Interferometry and Laser Metrology','3','Fall (odd years)','',0,'H','High-resolution measurement with lasers and interferometric sensors.'],
+['ECE 507','Plasma Physics and Applications','3','Spring (odd years)','',0,'H','Plasma fundamentals and industrial uses.'],
+['ECE 512','Digital Signal Processing','3','Fall','',1,'H','Discrete-time signals, digital filter design, fast algorithms and quantization effects.'],
+['ECE 513','Digital Image Processing','3','Spring','',2,'M','Image acquisition, enhancement, restoration, compression and analysis.'],
+['ECE 514','Applications of Random Processes','3','Fall','',1,'H','Random processes for detection and estimation: bit-error rate, SNR, Wiener filters.'],
+['ECE 516','Information Theory','3','Fall','',0,'H','Entropy, lossless compression, channel capacity and coding theorems.'],
+['ECE 517','Advanced Optical Imaging','3','—','',0,'H','Design principles and image-formation theory for advanced optical imaging.'],
+['ECE 518','Biophotonics','3','—','',0,'H','Optical instruments for medical diagnostics and light in biological tissue.'],
+['ECE 519','Network Centric Systems','3','Spring (even years)','',0,'M','Network science and the fundamentals of network-centric systems.'],
+['ECE 520','Optimization Methods: Control and Communication','3','Spring','',0,'H','Linear and nonlinear optimization theory for control and communication systems.'],
+['ECE 521','Satellite Communication','3','Spring (odd years)','',0,'M','Engineering satellite communication systems.'],
+['ECE 522','Random Walks','3','Fall (even years)','',0,'H','Mathematics of random walks, diffusion and stochastic modeling.'],
+['ECE 526','Biological Physics','3','Fall (odd years)','',0,'H','Mathematical and physical models of biological systems and biomolecules.'],
+['ECE 527A–F','Biosensing modules (six 1-credit modules)','1 each','—','',0,'M','Biosensor fundamentals: cells as circuits, noise, sensor circuits, electrochemical, affinity and optical sensors.'],
+['ECE 528','Embedded Systems and Machine Learning','4','Fall','',1,'M','Machine learning on embedded hardware: hardware/software optimization and accelerators (same as CS 528).'],
+['ECE 529','Signal Processing and Artificial Intelligence','3','Spring (odd years)','',2,'M','AI and machine-learning fundamentals applied to signal processing.'],
+['ECE 532','Dynamics of Complex Engineering Systems','3','Fall','SE',1,'M','Emergent behavior in complex socio-technical systems (same as SYSE 532).'],
+['ECE 534','Analog Integrated Circuit Design','4','—','',0,'H','Designing analog ICs: CMOS op-amps, comparators, PLLs.'],
+['ECE 536','RF Integrated Circuit Design','3','Fall (every third year)','',0,'H','Designing RF ICs: low-noise amps, oscillators, mixers, power amps.'],
+['ECE 537','Biomedical Signal Processing','3','—','',2,'M','Modeling and classifying biosignals such as EEG, ECG and EMG.'],
+['ECE 538','Design/Analysis of Analog-Digital Interface','4','—','',0,'H','Design and analysis of analog/digital interface circuits.'],
+['ECE 539','Digital Communications','3','Spring (even years)','',0,'H','Signal space, optimal receivers, waveform coding and error-correcting codes.'],
+['ECE 540','Computational Electromagnetics','3','—','',0,'H','Numerical methods for electromagnetic fields, scattering and radiation.'],
+['ECE 541','Applied Electromagnetics','3','Fall (even years)','',0,'H','Wave propagation, radiation, scattering and bioelectromagnetics.'],
+['ECE 544','Silicon Photonics for Computing Systems','3','Fall','',0,'H','Modeling and designing silicon photonic devices and circuits.'],
+['ECE 546','Laser Fundamentals and Devices','3','Spring (even years)','',0,'H','Light amplification, laser excitation and laser devices.'],
+['ECE 548','Microwave Theory and Component Design','3','Spring (odd years)','',0,'H','Microwave engineering: components, devices and measurements.'],
+['ECE 549','Radar Systems and Design','3','Spring (even years)','',0,'H','How radar works and how different radar types are designed.'],
+['ECE 553','Adaptive Systems and Machine Learning','3','Spring','',2,'M','Adaptive systems and machine-learning algorithms, including deep learning.'],
+['ECE 554','Computer Architecture','3','Spring (odd years)','',0,'M','Advanced architecture: ML acceleration, multiprocessors and memory systems.'],
+['ECE 555','Advanced Robotics: Redundancy and Optimization','3','Spring (even years)','',1,'H','Analysis, design and control of kinematically redundant robots. Needs linear algebra.'],
+['ECE 556','AI for Radar and Remote Sensing','3','Spring','',1,'M','AI and data-science techniques applied to radar and remote-sensing data.'],
+['ECE 559','Machine Learning in Imaging and Spectroscopy','3','Fall (even years)','',2,'M','Current machine-learning techniques for biomedical imaging and spectroscopy.'],
+['ECE 560','Foundations of Fine-Grain Parallelism','4','—','',0,'M','Same as CS 560: programming new architectures and automatic parallelization.'],
+['ECE 561','Hardware/Software Design of Embedded Systems','4','Spring (even years)','',0,'M','Same as CS 561: embedded system modeling and hardware/software partitioning.'],
+['ECE 562','Power Electronics I','3','Spring (even years)','',0,'H','Switch-mode and resonant power converters and their control.'],
+['ECE 563','Introduction to Power System Markets','3','Spring (even years)','',0,'M','Economics and market operations of deregulated electric power systems.'],
+['ECE 564','Semiconductor Memory','3','Spring','',0,'M','Memory cell design, reliability, security and radiation effects.'],
+['ECE 565','Electrical Power Engineering','3','Fall (odd years)','SE',0,'H','Power-system analysis with computer tools (same as ENGR 565).'],
+['ECE 566','Grid Integration of Renewable Energy Systems','3','Spring (odd years)','SE',0,'M','Integrating wind, solar and other renewables into grids and microgrids.'],
+['ECE 568','Communication Systems in Smart Grids','3','Spring (even years)','',0,'M','Smart-grid architectures from control and communication perspectives.'],
+['ECE 570','Microgrids','3','Spring (odd years)','',0,'H','Microgrid architecture, modeling and hierarchical control.'],
+['ECE 571','VLSI System Design','4','Spring','',0,'M','System-level integrated-circuit design, parallel architectures and systolic arrays.'],
+['ECE 572','Semiconductor Transistors','1','—','',0,'H','Quantitative analysis of fields and currents in MOSFETs and bipolar transistors.'],
+['ECE 573','Semiconductor Optoelectronics Laboratory','3','—','',0,'M','Lab characterization of optoelectronic devices and circuits.'],
+['ECE 574','Optical Properties in Solids','3','Spring (even years)','',0,'H','Light propagation and linear and nonlinear optical properties of materials.'],
+['ECE 578','Satellite Data Analysis','3','Fall (odd years)','',1,'M','Statistical and time-series methods for filtering and analyzing satellite data and imagery.'],
+['ECE 579','Global Navigation Satellite Systems','3','—','',0,'M','GNSS constellations, receivers and measurement errors.'],
+['ECE 604','Nonlinear Optics','3','—','',0,'H','Principles of nonlinear optics and nonlinear spectroscopy.'],
+['ECE 611','Nonlinear Control Systems','3','Fall (even years)','',0,'H','Analysis and controller design for nonlinear systems.'],
+['ECE 641','Electromagnetics','3','—','',0,'H','Electrostatics, magnetostatics, boundary-value problems and Maxwell\'s equations.'],
+['ECE 650','Extreme Ultraviolet and Soft X-Ray Radiation','3','—','',0,'H','Principles of short-wavelength electromagnetic radiation.'],
+['ECE 652','Estimation and Filtering Theory','3','—','',1,'H','Parameter and state estimation, including Kalman filtering.'],
+['ECE 653','Detection Theory','3','—','',0,'H','Neyman-Pearson and Bayes detectors, matched filters, distributed detection.'],
+['ECE 658','Internet Engineering','4','Fall (even years)','',0,'M','Same as CS 658: link technologies, routing, switching and multicast.'],
+['ECE 666','Topics in Robotics','3','Spring (odd years)','',1,'M','Recent developments in robotics, automation and intelligent systems.'],
+['ECE 669','Emerging Topics in AI for Power Systems','3','Fall (even years)','',0,'M','Recent uses of AI in electric power and energy systems.'],
+['ECE 673','Thin Film Growth','3','Spring (odd years)','',0,'M','Growing and characterizing thin optical films.'],
+['ECE 742','Topics in Electromagnetics','3','—','',0,'H','Wave propagation and scattering applied to microwave, Doppler and weather radar.'],
+['ECE 752','Topics in Signal Processing','3','—','',0,'H','Adaptive filtering, spectral estimation, sonar and radar signal processing.'],
+['ECE 777','X-Ray Lasers','3','—','',0,'H','Design and construction of soft X-ray lasers and X-ray optics.']
 ];
+var MATH = {}; COURSES.forEach(function (c) { MATH[c[0]] = c[6]; });
+var MATH_LABEL = { L: 'Low', M: 'Medium', H: 'High' };
 
 function counts(c) {
   var code = c[0], lists = c[4], dept = code.split(' ')[0];
@@ -738,24 +763,26 @@ function badge(b) { return '<span class="badge b-' + b[0] + '">' + esc(b[1]) + '
 function renderCat() {
   var list = document.getElementById('f-list').value, term = document.getElementById('f-term').value;
   var q = document.getElementById('f-q').value.trim().toLowerCase(), fit = document.getElementById('f-fit').checked;
+  var math = document.getElementById('f-math').value;
   var rows = COURSES.filter(function (c) {
     var dept = c[0].split(' ')[0];
     if (list.indexOf('dept:') === 0) { if (list.slice(5).split(',').indexOf(dept) < 0) return false; }
     else if (list !== 'all' && c[4] !== list) return false;
     if (term && c[3].indexOf(term) < 0) return false;
     if (fit && c[5] !== 2) return false;
-    if (q && (c[0] + ' ' + c[1]).toLowerCase().indexOf(q) < 0) return false;
+    if (math && math.indexOf(c[6]) < 0) return false;
+    if (q && (c[0] + ' ' + c[1] + ' ' + c[7]).toLowerCase().indexOf(q) < 0) return false;
     return true;
   });
   document.getElementById('cat-body').innerHTML = rows.map(function (c) {
     var k = counts(c);
-    return '<tr><td class="code">' + esc(c[0]) + '</td><td>' + esc(c[1]) + '</td><td class="num">' + esc(c[2]) + '</td><td class="terms">' + esc(c[3]) +
-      '</td><td>' + badge(k[0]) + '</td><td>' + badge(k[1]) + '</td><td>' + badge(k[2]) + '</td><td>' +
+    return '<tr><td class="code">' + esc(c[0]) + '</td><td><strong>' + esc(c[1]) + '</strong><div class="desc">' + esc(c[7]) + '</div></td><td class="num">' + esc(c[2]) + '</td><td class="terms">' + esc(c[3]) +
+      '</td><td><span class="math math-' + c[6] + '">' + MATH_LABEL[c[6]] + '</span></td><td>' + badge(k[0]) + '</td><td>' + badge(k[1]) + '</td><td>' + badge(k[2]) + '</td><td>' +
       (c[5] === 2 ? '<span class="fit2">Strong</span>' : c[5] === 1 ? '<span class="fit1">Related</span>' : '') + '</td></tr>';
-  }).join('') || '<tr><td colspan="8" class="muted">No courses match these filters. Clear the search or pick "All courses".</td></tr>';
+  }).join('') || '<tr><td colspan="9" class="muted">No courses match these filters. Clear the search or pick "All courses".</td></tr>';
   document.getElementById('f-count').textContent = rows.length + ' of ' + COURSES.length + ' courses';
 }
-['f-list', 'f-term', 'f-fit'].forEach(function (id) { document.getElementById(id).addEventListener('change', renderCat); });
+['f-list', 'f-term', 'f-fit', 'f-math'].forEach(function (id) { document.getElementById(id).addEventListener('change', renderCat); });
 document.getElementById('f-q').addEventListener('input', renderCat);
 renderCat();
 
@@ -763,16 +790,16 @@ renderCat();
 var PLANS = {
   se: {
     intro: 'Coursework 42 credits (SYSE 701 + 7 depth courses + 18 elective credits), then 30 dissertation credits = 72. The electives are CS and ECE ML and vision courses, which gives you the CS depth without the CS breadth groups.',
-    transfer: 'If CSU accepts 30 credits from your MS, only about 42 remain: SYSE 701, roughly 3 courses, and the dissertation. The courses tagged "core" are the ones to keep; the rest become optional.',
+    transfer: 'If CSU accepts 30 credits from your MS, only about 42 remain: SYSE 701, roughly 3 courses, and the dissertation. The courses tagged "must-take" are the ones to keep; the rest become optional.',
     totals: ['Coursework 42', 'Dissertation 30', 'Total 72'],
     sems: [
-      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['CS 545', 'Machine Learning', 4, 'Elective', 1], ['SYSE 571', 'Analytics in Systems Engineering', 3, 'Depth', 1], ['ENGR 535', 'Modeling Human Systems Behavior', 3, 'Depth', 0]], m: ['Advisor appointed before first registration'] },
-      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['SYSE 701', 'Research Methods in SE', 3, 'Required · Spring only', 1], ['SYSE 512', 'Systems Sensing and Imaging Analysis', 3, 'Depth', 1], ['CS 510', 'Image Computation', 4, 'Elective', 0]] },
+      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['CS 545', 'Machine Learning', 4, 'Technical elective', 1], ['SYSE 571', 'Analytics in Systems Engineering', 3, 'Depth menu', 1], ['ENGR 535', 'Modeling Human Systems Behavior', 3, 'Depth menu', 0]], m: ['Advisor appointed before first registration'] },
+      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['SYSE 701', 'Research Methods in SE', 3, 'Required · Spring only', 1], ['SYSE 512', 'Systems Sensing and Imaging Analysis', 3, 'Depth menu', 1], ['CS 510', 'Image Computation', 4, 'Technical elective', 0]] },
       { t: 'Summer 2028', y: '', s: 'summer', c: [], r: ['Research on the dissertation topic (SYSE 799A, credits as your advisor sets)'] },
-      { t: 'Fall 2028', y: 'Year 2', s: 'fall', c: [['SYSE 541', 'Engineering Data Design and Visualization', 3, 'Depth', 0], ['CS 535', 'Big Data', 4, 'Elective', 0], ['SYSE 521', 'Applied AI Projects in SE', 3, 'Elective', 0]] },
-      { t: 'Spring 2029', y: 'Year 2', s: 'spring', c: [['SYSE 534', 'Human Systems Integration', 3, 'Depth', 0], ['SYSE 549', 'Secure Vehicle and Industrial Networking', 3, 'Depth', 0], ['ECE 513', 'Digital Image Processing', 3, 'Elective', 0]], m: ['Committee + program of study (GS Form 6) before registering for semester 4'] },
+      { t: 'Fall 2028', y: 'Year 2', s: 'fall', c: [['SYSE 541', 'Engineering Data Design and Visualization', 3, 'Depth menu', 0], ['CS 535', 'Big Data', 4, 'Technical elective', 0], ['SYSE 521', 'Applied AI Projects in SE', 3, 'Technical elective', 0]] },
+      { t: 'Spring 2029', y: 'Year 2', s: 'spring', c: [['SYSE 534', 'Human Systems Integration', 3, 'Depth menu', 0], ['SYSE 549', 'Secure Vehicle and Industrial Networking', 3, 'Depth menu', 0], ['ECE 513', 'Digital Image Processing', 3, 'Technical elective', 0]], m: ['Committee + program of study (GS Form 6) before registering for semester 4'] },
       { t: 'Fall 2029', y: 'Year 3', s: 'fall', c: [], r: ['SYSE 799A dissertation'], m: ['Preliminary exam (proposal), target'] },
-      { t: 'Spring 2030', y: 'Year 3', s: 'spring', c: [['ENGR 540', 'Design Analysis of Engineering Experiments', 3, 'Depth', 0]], r: ['SYSE 799A dissertation'] },
+      { t: 'Spring 2030', y: 'Year 3', s: 'spring', c: [['ENGR 540', 'Design Analysis of Engineering Experiments', 3, 'Depth menu', 0]], r: ['SYSE 799A dissertation'] },
       { t: 'Fall 2030 – Spring 2031', y: 'Year 4', s: 'fall', c: [], r: ['SYSE 799A dissertation'], m: ['Final exam (defense), target spring 2031; at least two terms after the preliminary exam'] }
     ]
   },
@@ -803,14 +830,15 @@ var PLANS = {
   }
 };
 
+var LEGEND = '<div class="plan-legend"><div><strong>Counts as</strong>: which requirement the course fills. <em>Required</em> = named in the degree; <em>Depth menu</em> = one of the SE depth courses (21 credits needed); <em>Technical elective</em> = free elective with advisor approval (18 credits needed); <em>Group 1–3</em> = CS breadth groups.</div><div><span class="keep">must-take</span> is a separate tag: my priority for you. Take it even if your MS transfers 30 credits and you only need a few courses. A course can be both, e.g. a Technical elective that is also must-take.</div></div>';
 function renderPlan(key) {
   var p = PLANS[key];
-  var html = '<p class="plan-note">' + esc(p.intro) + '</p><div class="totals">' + p.totals.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div><div class="sems">';
+  var html = '<p class="plan-note">' + esc(p.intro) + '</p><div class="totals">' + p.totals.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' + LEGEND + '<div class="sems">';
   p.sems.forEach(function (s) {
     var cr = s.c.reduce(function (a, c) { return a + c[2]; }, 0);
     html += '<div class="sem ' + s.s + '"><h4>' + esc(s.t) + '<small>' + esc(s.y) + (cr ? ' · ' + cr + ' cr' : '') + '</small></h4>';
     s.c.forEach(function (c) {
-      html += '<div class="crs"><span class="code">' + esc(c[0]) + '</span><span>' + esc(c[1]) + (c[4] ? '<span class="keep">core</span>' : '') + '</span><span class="cr">' + c[2] + '</span><span class="why">' + esc(c[3]) + '</span></div>';
+      html += '<div class="crs"><span class="code">' + esc(c[0]) + '</span><span>' + esc(c[1]) + (c[4] ? '<span class="keep">must-take</span>' : '') + '</span><span class="cr">' + c[2] + '</span><span class="why">Counts as: ' + esc(c[3]) + (MATH[c[0]] ? ' · Math: ' + MATH_LABEL[MATH[c[0]]] : '') + '</span></div>';
     });
     (s.r || []).forEach(function (r) { html += '<div class="mile res">' + esc(r) + '</div>'; });
     (s.m || []).forEach(function (m) { html += '<div class="mile">' + esc(m) + '</div>'; });
