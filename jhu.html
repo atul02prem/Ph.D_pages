@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<title>JHU PhD Dossier</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@500;600&display=swap">
+</head>
+<body>
+<style>
+/* Layout: an admissions dossier — summary strip, then numbered sections in reading order, one narrow column with wide tables scrolling in place. */
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --ink: #1b2420;
+  --muted: #5b6862;
+  --rule: #d9dfdb;
+  --accent: #1d5b47;
+  --accent-soft: #e3efe9;
+  --warn: #8a5a00;
+  --warn-soft: #fbf1dc;
+  --bad: #9b2c2c;
+  --bad-soft: #f8e4e2;
+  --seg1: #1d5b47; --seg2: #4f8f78; --seg3: #9cc4b3; --seg4: #c9b27c; --seg5: #8d7bb0; --seg6: #b9b2cf; --seg7: #6b7a85;
+  --display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121715; --surface: #1a211e; --ink: #e6ece9; --muted: #9aa8a1; --rule: #2c3631;
+    --accent: #7cc4a6; --accent-soft: #1f3129; --warn: #e2b55a; --warn-soft: #2e2716; --bad: #ef8f86; --bad-soft: #352020;
+    --seg1: #7cc4a6; --seg2: #4f9a7f; --seg3: #2f6a56; --seg4: #b89d5e; --seg5: #9d8cc4; --seg6: #6b6290; --seg7: #7d8b95;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121715; --surface: #1a211e; --ink: #e6ece9; --muted: #9aa8a1; --rule: #2c3631;
+  --accent: #7cc4a6; --accent-soft: #1f3129; --warn: #e2b55a; --warn-soft: #2e2716; --bad: #ef8f86; --bad-soft: #352020;
+  --seg1: #7cc4a6; --seg2: #4f9a7f; --seg3: #2f6a56; --seg4: #b89d5e; --seg5: #9d8cc4; --seg6: #6b6290; --seg7: #7d8b95;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--body); }
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 600; }
+h2 { font-size: 22px; font-weight: 600; display: flex; gap: 10px; align-items: baseline; }
+h2 .n { font-family: var(--mono); font-size: 13px; color: var(--muted); font-weight: 400; }
+h3 { font-size: 17px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 13px; }
+.muted { color: var(--muted); }
+section { display: grid; gap: 16px; }
+header { display: grid; gap: 14px; border-bottom: 1px solid var(--rule); padding-bottom: 24px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 12px/1 var(--body); padding: 6px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.plain { background: transparent; border: 1px solid var(--rule); color: var(--muted); }
+
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.glance > div { background: var(--surface); padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.glance .big { font: 600 20px/1.25 var(--display); }
+
+.callout { background: var(--surface); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 6px; padding: 16px 18px; display: grid; gap: 8px; }
+.callout.warn { border-left-color: var(--warn); }
+.callout.bad { border-left-color: var(--bad); }
+blockquote { margin: 0; padding-left: 12px; border-left: 2px solid var(--rule); color: var(--muted); font-style: italic; }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--rule); }
+th { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* credit bars */
+.bars { display: grid; gap: 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; }
+.bar-row { display: grid; grid-template-columns: 170px 1fr; gap: 12px; align-items: center; }
+.bar-row .lbl { font-weight: 500; font-size: 14px; }
+.bar-row .lbl small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+.bar { display: flex; height: 30px; border-radius: 4px; overflow: hidden; min-width: 0; }
+.bar span { display: flex; align-items: center; justify-content: center; font: 500 11px/1 var(--mono); color: #fff; white-space: nowrap; overflow: hidden; border-right: 1px solid var(--surface); }
+.bar span:last-child { border-right: 0; }
+.s1 { background: var(--seg1); } .s2 { background: var(--seg2); } .s3 { background: var(--seg3); color: var(--ink) !important; } .s4 { background: var(--seg4); color: #1b2420 !important; } .s5 { background: var(--seg5); } .s6 { background: var(--seg6); color: #1b2420 !important; } .s7 { background: var(--seg7); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+@media (max-width: 560px) { .bar-row { grid-template-columns: 1fr; gap: 6px; } }
+
+/* program cards */
+.programs { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.prog { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.prog.pick { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+.prog ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+.verdict { font: 600 12px/1 var(--body); }
+.verdict.good { color: var(--accent); } .verdict.mid { color: var(--warn); } .verdict.no { color: var(--bad); }
+
+.courses { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px 20px; margin: 0; padding: 0; list-style: none; }
+.courses li { display: grid; grid-template-columns: 78px 1fr; gap: 8px; font-size: 14px; padding: 6px 0; border-bottom: 1px dashed var(--rule); }
+.courses .code { font-family: var(--mono); font-size: 12.5px; color: var(--accent); padding-top: 1px; }
+
+/* PI cards */
+.pis { display: grid; gap: 14px; }
+.pi { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.pi > summary { list-style: none; cursor: pointer; padding: 16px; display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: start; }
+.pi > summary::-webkit-details-marker { display: none; }
+.pi > summary .who { display: grid; gap: 4px; min-width: 0; }
+.pi > summary .role { color: var(--muted); font-size: 13.5px; }
+.pi > summary .tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.pi > summary .why { grid-column: 1 / -1; font-size: 14px; }
+.pi > summary .toggle { grid-column: 1 / -1; font: 500 12px/1 var(--mono); color: var(--accent); }
+.pi[open] > summary .toggle::after { content: " — hide papers"; }
+.pi:not([open]) > summary .toggle::after { content: " — show papers"; }
+.pi .body { padding: 0 16px 16px; display: grid; gap: 12px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.pubs { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.pubs li { display: grid; grid-template-columns: 46px 1fr; gap: 10px; font-size: 14px; }
+.pubs .yr { font-family: var(--mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 1px; }
+.pubs .venue { color: var(--muted); font-size: 13px; }
+.tier { font: 600 11px/1 var(--mono); padding: 5px 8px; border-radius: 4px; }
+.tier.A { background: var(--accent); color: var(--surface); }
+.tier.B { background: var(--accent-soft); color: var(--accent); }
+.tier.C { background: var(--warn-soft); color: var(--warn); }
+@media (max-width: 560px) { .pi > summary { grid-template-columns: 1fr; } .pi > summary .tags { justify-content: flex-start; } }
+
+/* timeline */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-left: 2px solid var(--rule); margin-left: 6px; }
+.timeline li { position: relative; padding: 0 0 18px 20px; display: grid; gap: 2px; }
+.timeline li::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
+.timeline li.hard::before { background: var(--bad); border-color: var(--bad); }
+.timeline li.soft::before { border-color: var(--warn); }
+.timeline .when { font: 500 13px/1.3 var(--mono); }
+
+/* questions */
+.qs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: q; }
+.qs li { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; grid-template-columns: 28px 1fr; gap: 10px; counter-increment: q; }
+.qs li::before { content: counter(q); font: 600 13px/1.6 var(--mono); color: var(--accent); }
+.qs .to { font-size: 12.5px; color: var(--muted); }
+.copy { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.copy code { font: 13px var(--mono); background: var(--accent-soft); color: var(--accent); padding: 3px 7px; border-radius: 4px; user-select: all; overflow-wrap: anywhere; }
+.copy button { font: 500 12px var(--body); border: 1px solid var(--rule); background: var(--surface); color: var(--ink); border-radius: 4px; padding: 3px 8px; cursor: pointer; }
+.copy button:hover { border-color: var(--accent); }
+
+.sources { font-size: 13px; color: var(--muted); display: grid; gap: 4px; padding-left: 18px; margin: 0; }
+footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+/* which-PhD cards */
+.which { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.wcard { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.wcard.pick { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+.wcard .q { font: italic 500 16px/1.4 var(--display); }
+.kws { display: flex; flex-wrap: wrap; gap: 6px; }
+.kw { font: 500 12px/1 var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.wcard.alt .kw { background: var(--bg); color: var(--ink); border: 1px solid var(--rule); }
+.wcard dl { margin: 0; display: grid; gap: 8px; font-size: 14px; }
+.wcard dt { font: 500 11px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.wcard dd { margin: 0; }
+
+/* catalogue */
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field select, .field input[type="search"] { font: 14px var(--body); padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.field.check { display: flex; gap: 6px; align-items: center; font-size: 14px; padding-bottom: 6px; }
+.toolbar .count { margin-left: auto; font: 12px var(--mono); color: var(--muted); padding-bottom: 8px; }
+.cat { max-height: 560px; overflow: auto; }
+.cat thead th { position: sticky; top: 0; z-index: 1; }
+.cat td.code { font: 12.5px var(--mono); color: var(--accent); white-space: nowrap; }
+.cat td.terms { font-size: 13px; white-space: nowrap; }
+.badge { display: inline-block; font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 3px; white-space: nowrap; }
+.b-req { background: var(--accent); color: var(--surface); }
+.b-yes { background: var(--accent-soft); color: var(--accent); }
+.b-maybe { background: var(--warn-soft); color: var(--warn); }
+.b-no { color: var(--muted); border: 1px dashed var(--rule); }
+.fit2 { font-weight: 600; color: var(--accent); font-size: 13px; white-space: nowrap; }
+.fit1 { color: var(--muted); font-size: 13px; white-space: nowrap; }
+
+/* plan */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--rule); }
+.tab { font: 500 14px var(--body); padding: 8px 12px; border: 0; background: none; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.sems { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.sem { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.sem.fall { box-shadow: inset 0 3px 0 var(--seg4); }
+.sem.spring { box-shadow: inset 0 3px 0 var(--seg2); }
+.sem.summer { box-shadow: inset 0 3px 0 var(--seg6); }
+.sem h4 { margin: 0; font: 600 15px/1.3 var(--display); display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.sem h4 small { font: 12px var(--mono); color: var(--muted); font-weight: 400; }
+.crs { display: grid; grid-template-columns: 70px 1fr auto; gap: 2px 8px; font-size: 13.5px; align-items: baseline; }
+.crs .code { font: 12px var(--mono); color: var(--accent); }
+.crs .cr { font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.crs .why { grid-column: 2 / -1; font-size: 12px; color: var(--muted); }
+.crs .keep { font: 500 10px/1 var(--mono); color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 2px 4px; margin-left: 4px; vertical-align: 1px; }
+.mile { font-size: 13px; padding: 6px 8px; border-radius: 4px; background: var(--warn-soft); color: var(--warn); }
+.mile.res { background: var(--accent-soft); color: var(--accent); }
+.totals { font: 13px var(--mono); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.cat .desc { font-size: 12.5px; color: var(--muted); margin-top: 2px; max-width: 56ch; }
+.math { font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 3px; white-space: nowrap; }
+.math-L { background: var(--accent-soft); color: var(--accent); }
+.math-M { background: var(--warn-soft); color: var(--warn); }
+.math-H { background: var(--bad-soft); color: var(--bad); }
+.plan-legend { display: grid; gap: 6px; font-size: 13px; color: var(--muted); background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 10px 12px; }
+.facts { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.math-U { background: transparent; color: var(--muted); border: 1px dashed var(--rule); }
+.chip.ric { background: var(--warn-soft); color: var(--warn); }
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">School dossier · 3 of N · verified 2026-10-19</span>
+  <h1>Johns Hopkins University</h1>
+  <p class="muted">Baltimore, MD · Whiting School of Engineering: Electrical &amp; Computer Engineering (ECE) and Computer Science (CS)</p>
+  <div class="chips">
+    <span class="chip ric">Dr. Ricanek's list: Rama Chellappa (+ "Vijay")</span>
+    <span class="chip">Full funding guaranteed for PhD students</span>
+    <span class="chip">GRE not required (CS)</span>
+    <span class="chip plain">Target start: Fall 2027</span>
+  </div>
+</header>
+
+<section aria-labelledby="glance">
+  <h2 id="glance"><span class="n">00</span>At a glance</h2>
+  <div class="glance">
+    <div><span class="eyebrow">Recommended path</span><span class="big">PhD, ECE with Chellappa</span><span class="muted">Or the CS PhD if you're co-advised with CS faculty (Saria, Unberath, Yuille)</span></div>
+    <div><span class="eyebrow">Fall 2027 deadline</span><span class="big">Dec 15, 2026</span><span class="muted">CS PhD (annual date). ECE PhD is not confirmed: Dec 15–22 per third-party listings.</span></div>
+    <div><span class="eyebrow">Funding</span><span class="big">~$50k stipend + tuition</span><span class="muted">CS: "All full-time CS PhD students in good academic standing are guaranteed full funding"</span></div>
+    <div><span class="eyebrow">D.Eng?</span><span class="big">Not viable for you</span><span class="muted">Employer-funded research contract; JHU provides no funding</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="which">
+  <h2 id="which"><span class="n">01</span>Which PhD? The two in plain terms</h2>
+  <p>At JHU the ECE and CS departments overlap heavily on vision and ML. Chellappa and Patel (vision) sit in ECE; Yuille, Unberath and Saria sit in CS. Choose by advisor first.</p>
+  <div class="which">
+    <article class="wcard pick">
+      <span class="eyebrow">Electrical &amp; Computer Engineering · recommended</span>
+      <p class="q">"How do you make machines perceive and understand the world from images, video and signals?"</p>
+      <div class="kws"><span class="kw">Vision &amp; perception</span><span class="kw">No required course list</span><span class="kw">Qualifier + oral exam</span></div>
+      <dl>
+        <div><dt>Your work would be</dt><dd>Computer vision on real-world video and sensors: traffic video, 3D and egocentric vision, adverse-weather and thermal vision, medical images (Chellappa, Patel)</dd></div>
+        <div><dt>Example thesis</dt><dd>Re-identifying vehicles across city traffic cameras under poor weather and lighting, building on your TruckIDMe work</dd></div>
+        <div><dt>Coursework</dt><dd>"There are no lists of required courses." You and your advisor pick, subject to a minimum load each semester.</dd></div>
+        <div><dt>Exams · duties</dt><dd>A qualifying exam (question sets from 3 faculty) before semester 4, a research proposal + oral exam (GBO) before semester 6, and work as a TA</dd></div>
+      </dl>
+    </article>
+    <article class="wcard alt">
+      <span class="eyebrow">Computer Science</span>
+      <p class="q">"How do you build better computing methods, here for vision, health and human-centered AI?"</p>
+      <div class="kws"><span class="kw">Core CS</span><span class="kw">8 courses, 4 of 5 areas</span><span class="kw">Two research projects</span></div>
+      <dl>
+        <div><dt>Your work would be</dt><dd>ML and vision methods for health and people: health ML under distribution shift (Saria), human-centered medical AI and mixed reality (Unberath), generative and 3D vision (Yuille)</dd></div>
+        <div><dt>Example thesis</dt><dd>Detecting when a deployed health model's input data has drifted, from real hospital or wearable streams</dd></div>
+        <div><dt>Coursework</dt><dd>8 courses covering 4 of 5 areas, so <strong>Theory can be skipped</strong>. A B+ average, finished by the end of year 2.</dd></div>
+        <div><dt>Exams · duties</dt><dd>Two qualifying research projects with different faculty (by year 3), a GBO oral exam, one semester as a TA</dd></div>
+      </dl>
+    </article>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th></th><th>ECE</th><th>Computer Science</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Fit with your areas</strong></td><td>Strong for vision and perception (Area 2), traffic video (Area 1)</td><td>Strong for health and human-centered AI (Areas 3/1), vision</td></tr>
+        <tr><td><strong>Coursework load</strong></td><td>Lightest: no required list</td><td>8 courses (24 credits), B+ average</td></tr>
+        <tr><td><strong>Math-heavy requirement</strong></td><td>None mandated; the qualifier depends on your 3 examiners</td><td>None: Theory is optional (4 of 5 areas)</td></tr>
+        <tr><td><strong>Exams</strong></td><td>Qualifier by semester 4; GBO by semester 6</td><td>2 qualifying projects by year 3; GBO in year 3</td></tr>
+        <tr><td><strong>Ricanek connection</strong></td><td>Chellappa (and possibly Patel, if he's "Vijay")</td><td>None directly, but Saria co-publishes with Chellappa</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted">Bottom line: at JHU, ECE isn't the hardware route. Chellappa and Patel's ECE labs are core computer vision. Pick ECE for Chellappa, or CS if your main advisor is in CS.</p>
+</section>
+
+<section aria-labelledby="progs">
+  <h2 id="progs"><span class="n">02</span>Programs offered: requirements side by side</h2>
+  <p>JHU doesn't run PhDs on a fixed credit total. Requirements are courses, exams and teaching. From the 2026–27 JHU Academic Catalogue.</p>
+  <div class="bars" role="img" aria-label="Structure of the two programs">
+    <div class="bar-row"><div class="lbl">PhD ECE<small>no fixed course count</small></div>
+      <div class="bar"><span class="s3" style="flex:6" title="Advisor-approved coursework, minimum load each semester">Courses (advisor sets)</span><span class="s4" style="flex:2" title="Qualifying exam before semester 4">Qualifier</span><span class="s7" style="flex:2" title="Research proposal + Graduate Board Oral before semester 6">Proposal + GBO</span><span class="s1" style="flex:8" title="Dissertation research and public defense">Dissertation</span></div></div>
+    <div class="bar-row"><div class="lbl">PhD Computer Science<small>8 courses · 24 credits</small></div>
+      <div class="bar"><span class="s5" style="flex:4" title="4 courses covering 4 of the 5 areas">4 area courses</span><span class="s3" style="flex:4" title="4 more electives (at least 5 of 8 in CS)">4 electives</span><span class="s4" style="flex:2" title="Two qualifying research projects">2 projects</span><span class="s7" style="flex:2" title="Graduate Board Oral exam, ideally year 3">GBO</span><span class="s1" style="flex:8" title="Dissertation and defense">Dissertation</span></div></div>
+    <div class="legend">
+      <span><i class="s1"></i>Dissertation research</span><span><i class="s5"></i>CS area courses</span><span><i class="s3"></i>Other coursework</span><span><i class="s4"></i>Qualifying step</span><span><i class="s7"></i>Proposal / oral exam</span>
+    </div>
+  </div>
+
+  <div class="programs">
+    <article class="prog pick">
+      <span class="verdict good">Recommended (for Chellappa)</span>
+      <h3>PhD in Electrical &amp; Computer Engineering</h3>
+      <ul>
+        <li>"There are no lists of required courses." A minimum course load applies each semester.</li>
+        <li>Qualifying exam: question sets from 3 examiners (at least 2 tenure-track ECE), passed "before the beginning of the fourth semester". At most two attempts.</li>
+        <li>Research proposal (6 pages max) + Graduate Board Oral (GBO): 5-person committee, 2 hours, ideally before semester 6</li>
+        <li>Funded students "serve as a course/teaching assistant"</li>
+        <li>Public dissertation defense; typical limit of 7 years</li>
+        <li>PIs: Chellappa, Patel</li>
+      </ul>
+    </article>
+    <article class="prog">
+      <span class="verdict mid">Option with a CS advisor</span>
+      <h3>PhD in Computer Science</h3>
+      <ul>
+        <li>8 courses of 3 credits, at least 5 taught in CS, covering 4 of 5 areas: Applications, Reasoning, Software, Systems, Theory</li>
+        <li>B+ average across the 8; no grade below C-; done by end of year 2</li>
+        <li>Two qualifying projects with different faculty, each with a public report, by end of year 3</li>
+        <li>GBO (ideally year 3), one semester as a TA (+ EN.601.807 Teaching Practicum), CS Seminar in years 1–2</li>
+        <li>EN.500.603 Graduate Academic Ethics (first semester); AS.360.625 Responsible Conduct of Research (year 1)</li>
+        <li>PIs: Saria, Unberath, Yuille</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="callout" id="transfer">
+    <h3>Can your UNCW master's count? Partly. Up to 2 courses in CS; ECE doesn't say.</h3>
+    <ul class="facts">
+      <li><strong>CS PhD:</strong> "Up to two graduate courses from other institutions may transfer with advisor approval. More require department approval." So your MS could cut the 8 courses to about 6.</li>
+      <li><strong>ECE PhD:</strong> the catalogue doesn't address transfer. Since there's no required course list, your advisor sets how much coursework you take, so your MS mainly shows you already have the background.</li>
+      <li><strong>Also:</strong> CS awards an MSE "along the way" after coursework + the first project. You don't need it, but it's there.</li>
+      <li><strong>English test:</strong> the CS FAQ waives TOEFL/IELTS for applicants who "hold or will soon hold" a US master's. Your UNCW MS (Dec 2026) qualifies.</li>
+    </ul>
+  </div>
+</section>
+
+<section aria-labelledby="cat">
+  <h2 id="cat"><span class="n">03</span>Course catalogue</h2>
+  <p>Every CS graduate course actually offered in Fall 2026 or Spring 2026 (from the department's semester listings, with area tags), plus every 600-level ECE course in the 2026–27 catalogue.</p>
+  <div class="callout warn">
+    <p><strong>Two gaps.</strong> CS terms are real, from Fall 2026 and Spring 2026, but a course can move between semesters in other years. CS descriptions are <em>inferred from titles</em>, because I couldn't load the catalogue text for them. ECE descriptions come from the catalogue, but ECE terms aren't published there. Five ECE terms come from a JHU Data Science page, seen in search results only; the rest show "—".</p>
+  </div>
+  <div class="toolbar" role="group" aria-label="Filter courses">
+    <div class="field"><label class="eyebrow" for="f-list">List</label>
+      <select id="f-list">
+        <option value="all">All courses</option>
+        <option value="APPL">CS area · Applications</option>
+        <option value="RSNG">CS area · Reasoning</option>
+        <option value="SOFT">CS area · Software</option>
+        <option value="SYST">CS area · Systems</option>
+        <option value="THRY">CS area · Theory</option>
+        <option value="dept:520">All ECE (EN.520)</option>
+        <option value="dept:601">All CS (EN.601)</option>
+      </select></div>
+    <div class="field"><label class="eyebrow" for="f-term">Term</label>
+      <select id="f-term"><option value="">Any</option><option>Fall</option><option>Spring</option></select></div>
+    <div class="field"><label class="eyebrow" for="f-q">Search</label><input id="f-q" type="search" placeholder="e.g. vision"></div>
+    <div class="field"><label class="eyebrow" for="f-math">Math load</label>
+      <select id="f-math"><option value="">Any</option><option value="L">Low only</option><option value="LM">Low or medium</option></select></div>
+    <label class="field check" for="f-fit"><input id="f-fit" type="checkbox"> Strong fit only</label>
+    <span class="count" id="f-count" aria-live="polite"></span>
+  </div>
+  <div class="tablewrap cat">
+    <table>
+      <thead><tr><th>Code</th><th>Course · what it covers</th><th>Cr</th><th>Offered</th><th>Math</th><th>ECE PhD</th><th>CS PhD</th><th>Fit for you</th></tr></thead>
+      <tbody id="cat-body"></tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px"><strong>Math load</strong> is my estimate from the title and description. <em>Low</em>: conceptual or applied. <em>Medium</em>: statistics or linear algebra as tools. <em>High</em>: proofs, derivations or heavy theory. "Area: X" = counts toward the CS PhD's 4-of-5 area rule. "Related dept" = an ECE course the CS PhD accepts as an elective (ECE is a listed related department). "Counts*" = advisor-approved coursework for the ECE PhD.</p>
+</section>
+
+<section aria-labelledby="plan">
+  <h2 id="plan"><span class="n">04</span>Proposed course plan, Fall 2027 to 2031</h2>
+  <p>A draft schedule for each PhD. CS courses are placed in the semester they ran in 2026–27; the ECE placements (except the five with known terms) are my assumption.</p>
+  <div class="tabs" role="tablist" aria-label="Plan by program">
+    <button class="tab" role="tab" id="t-ece" aria-controls="plan-panel" aria-selected="true" data-plan="ece">ECE (with Chellappa)</button>
+    <button class="tab" role="tab" id="t-cs" aria-controls="plan-panel" aria-selected="false" data-plan="cs">Computer Science</button>
+  </div>
+  <div id="plan-panel" role="tabpanel" style="display:grid;gap:12px"></div>
+</section>
+
+<section aria-labelledby="deng">
+  <h2 id="deng"><span class="n">05</span>If you enrolled in the D.Eng, would JHU find the employer?</h2>
+  <div class="callout bad">
+    <h3>No. The D.Eng is a research contract between your employer and JHU, so you bring the employer.</h3>
+    <blockquote>"The centerpiece of the Doctor of Engineering degree is a research collaboration between your employer and the Whiting School of Engineering."</blockquote>
+    <blockquote>"There is no way to fund a D.Eng student's program through JHU (payroll, etc.)"</blockquote>
+    <p>You'd need a master's plus "significant professional experience" (3+ years recommended), a project your employer cares about, and a letter of support "indicating full financial support" from an employer co-advisor. You "cannot start" until funding and co-advising are secured. It's nonresidential, with conferences in Baltimore every January and June. Deadlines: Jan 1 (summer start), Jul 1 (spring start).</p>
+    <p class="muted">Not viable for you now. On an F-1 visa, a nonresidential, employer-funded doctorate doesn't fit. The PhD is the right route, and it's fully funded.</p>
+  </div>
+</section>
+
+<section aria-labelledby="pis">
+  <h2 id="pis"><span class="n">06</span>Possible PIs and their recent work</h2>
+  <div class="callout">
+    <h3>The strongest angle: Chellappa through Dr. Ricanek</h3>
+    <p>Chellappa is one of computer vision's most senior figures (2025 Azriel Rosenfeld Lifetime Achievement Award at ICCV) and a personal contact of Dr. Ricanek. His current work includes the <strong>AI City Challenge on traffic video</strong>, which connects directly to your TruckIDMe vehicle-identification paper, plus 3D and egocentric vision. He co-publishes with <strong>Suchi Saria</strong> (CS, health ML), so an ECE + CS co-advised project on vision for real-world or health data is plausible. Ask Dr. Ricanek whether "Vijay" is <strong>Vishal Patel</strong>; if so, you have two warm contacts in the same ECE vision group.</p>
+  </div>
+
+  <div class="pis">
+    <details class="pi" open>
+      <summary>
+        <div class="who"><h3>Rama Chellappa</h3><span class="role">Bloomberg Distinguished Professor, ECE and Biomedical Engineering · former interim co-director, JHU Data Science and AI Institute</span></div>
+        <div class="tags"><span class="chip ric">Dr. Ricanek's list</span><span class="tier B">TIER B</span><span class="chip plain">recruiting: unverified</span></div>
+        <p class="why">Broad vision: 3D foundation models and Gaussian splatting, egocentric video memory, traffic video (AI City Challenge), calibrated ML and LLM unlearning. Very active in 2026. No public recruiting note, so ask through Dr. Ricanek.</p>
+        <span class="toggle">2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>The 10th AI City Challenge <span class="venue">· arXiv · w/ Tang, Anastasiu, Chang et al.</span></span></li>
+          <li><span class="yr">2026</span><span>Never Look Back: Understanding Persistence in 3D Object Memory from Egocentric Videos <span class="venue">· arXiv · w/ Saria, Bharadhwaj</span></span></li>
+          <li><span class="yr">2026</span><span>Less Context, Better Geometry: Masked Geometric Encoder for Robust 3D Foundation Models <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>TileSkipper: Region-Adaptive Tile Pruning for 3D Gaussian Splatting <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>Toward Calibrated Mixture-of-Experts Under Distribution Shift <span class="venue">· arXiv · w/ Saria, Anqi Liu</span></span></li>
+          <li><span class="yr">2026</span><span>Let RGB Be the Language of Vision <span class="venue">· arXiv · w/ Yuille, Cihang Xie</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Sources: arXiv API; JHU news (2025 Azriel Rosenfeld award; DSAI co-director). The JHU faculty page returned 403 to the fetcher.</p>
+      </div>
+    </details>
+
+    <details class="pi" open>
+      <summary>
+        <div class="who"><h3>Vishal M. Patel</h3><span class="role">Professor, ECE · Vision &amp; Image Understanding (VIU) Lab</span></div>
+        <div class="tags"><span class="tier B">TIER B</span><span class="chip">recruiting: likely</span></div>
+        <p class="why">Vision under adverse conditions (thermal, weather), video world models, medical imaging, VLMs. The first-pass record notes 7 PhD graduates in May 2026, which suggests open slots. He may be the "Vijay" on Dr. Ricanek's list.</p>
+        <span class="toggle">2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>Thermal-Det <span class="venue">· CVPR 2026 (from the first-pass record)</span></span></li>
+          <li><span class="yr">2026</span><span>Wonder: Video World Model Done Better <span class="venue">· arXiv · w/ Xu, Jiang, Shu, Sunkavalli</span></span></li>
+          <li><span class="yr">2026</span><span>Probing Geospatial SSL Representations with Environmental Signals <span class="venue">· arXiv · w/ R. Mocharla</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Sources: arXiv API; first-pass record. His lab page (engineering.jhu.edu/vpatel36) returned 403 this time.</p>
+      </div>
+    </details>
+
+    <details class="pi">
+      <summary>
+        <div class="who"><h3>Suchi Saria</h3><span class="role">Computer Science (title not verified this pass)</span></div>
+        <div class="tags"><span class="tier B">TIER B</span><span class="chip plain">recruiting: unverified</span></div>
+        <p class="why">ML for health on real clinical and streaming data: detecting distribution shift, multimodal patient trajectories, evidence-grounded agents. Area 3 with a strong real-data focus, and Chellappa's most frequent co-author here.</p>
+        <span class="toggle">2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>Learning to Detect Shifts in Unstructured Data Streams via Monitoring-by-Betting <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>Admissible Diffusion for Multimodal Interventional Trajectories <span class="venue">· arXiv · w/ Paul Pu Liang</span></span></li>
+          <li><span class="yr">2026</span><span>Never Look Back: Persistence in 3D Object Memory from Egocentric Videos <span class="venue">· arXiv · w/ Chellappa</span></span></li>
+          <li><span class="yr">2026</span><span>Toward Calibrated Mixture-of-Experts Under Distribution Shift <span class="venue">· arXiv · w/ Chellappa</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Source: arXiv API. Her title and lab page weren't checked.</p>
+      </div>
+    </details>
+
+    <details class="pi">
+      <summary>
+        <div class="who"><h3>Mathias Unberath</h3><span class="role">John C. Malone Associate Professor, CS (also School of Medicine and School of Nursing) · ARCADE Lab · co-founder and CTO, Semaphor Surgical</span></div>
+        <div class="tags"><span class="tier B">TIER B</span><span class="chip plain">recruiting: unverified</span></div>
+        <p class="why">Human-centered AI for healthcare: medical computer vision, human-computer interaction, mixed reality and robotics. A mix of Areas 2, 3 and 1. He teaches EN.601.682 Deep Learning in Fall 2026, so he's current; his homepage lists no dated papers.</p>
+        <span class="toggle">2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>Teaching EN.601.682 Machine Learning: Deep Learning <span class="venue">· Fall 2026 course listing</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Source: his homepage (no dated papers listed) and the CS Fall 2026 course listing. Check Google Scholar for recent papers.</p>
+      </div>
+    </details>
+
+    <details class="pi">
+      <summary>
+        <div class="who"><h3>Alan L. Yuille</h3><span class="role">Computer Science (title not verified this pass)</span></div>
+        <div class="tags"><span class="tier B">TIER B</span><span class="chip plain">recruiting: unverified</span></div>
+        <p class="why">One of the most prolific vision researchers (CSRankings): generative video and 3D, scene and camera-motion synthesis, and large medical imaging datasets. Some of his teaching (Vision as Bayesian Inference) is theory-heavy.</p>
+        <span class="toggle">2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>Transforming Image Editors into Video Editors <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>Generative Cinematographer: Composing Camera and Object Motion in 3D <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>Merlin Plus: A Large-Scale, Multi-Cancer, Image-Mask-Report Dataset <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>FurE: Efficient Instance-Specific 3D Fur Reconstruction without Animal-Fur Datasets <span class="venue">· arXiv</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Sources: arXiv API; CS course listings (EN.601.685, EN.601.783).</p>
+      </div>
+    </details>
+  </div>
+  <p class="muted" style="font-size:13px">Not added this pass: Anand Bhattad (generative vision, new faculty), Chaowei Xiao (trustworthy ML), Jaemin Cho (multimodal), Renjie Zhao (IoT sensing). All are worth a look later.</p>
+</section>
+
+<section aria-labelledby="dates">
+  <h2 id="dates"><span class="n">07</span>Fall 2027 timeline</h2>
+  <ol class="timeline">
+    <li><span class="when">Now – Nov 2026</span><span>Ask Dr. Ricanek to introduce you to Chellappa, and to confirm who "Vijay" is. A short email to Saria is optional (CS says faculty contact is optional).</span></li>
+    <li class="hard"><span class="when">Dec 15, 2026 · CS PhD</span><span>The CS FAQ gives Dec 15 as the fall deadline. The application opens around Aug 15. No spring admission.</span></li>
+    <li class="soft"><span class="when">~Dec 15–22, 2026 · ECE PhD (estimate)</span><span>Not confirmed on an official ECE page. Peterson's lists Dec 22, with Dec 15 for financial awards. Submit by Dec 15 to be safe.</span></li>
+    <li><span class="when">Aug 2027 · start</span><span>CS: EN.500.603 Graduate Academic Ethics in the first semester.</span></li>
+    <li class="soft"><span class="when">Fall 2028 · ECE qualifier</span><span>Must be passed before semester 4 begins (Spring 2029)</span></li>
+  </ol>
+</section>
+
+<section aria-labelledby="constraints">
+  <h2 id="constraints"><span class="n">08</span>Constraints and entry requirements</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Requirement</th><th>Applies to</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td><strong>GRE</strong></td><td>CS PhD</td><td>Not required; optional, no minimum</td></tr>
+        <tr><td>GRE</td><td>ECE PhD</td><td>Not confirmed. A Whiting School page (seen in search results) says the GRE wasn't required for fall 2026 applications.</td></tr>
+        <tr><td>English test</td><td>CS PhD</td><td>Preferred TOEFL iBT 100 / IELTS 7. <strong>Waived</strong> for applicants who hold or will soon hold a US master's, which covers you.</td></tr>
+        <tr><td>Letters</td><td>CS PhD</td><td>Three</td></tr>
+        <tr><td>Application fee</td><td>CS PhD</td><td>About $75. Waivers exist for financial hardship and other cases (admissions@cs.jhu.edu).</td></tr>
+        <tr><td>Contacting faculty</td><td>CS PhD</td><td>Optional. Keep it short; "a generic email won't help or hurt".</td></tr>
+        <tr><td>Teaching</td><td>Both</td><td>ECE: funded students serve as TAs. CS: at least one semester as a TA.</td></tr>
+        <tr><td>Full-time residence</td><td>Both</td><td>CS: two consecutive full-time semesters; part-time study is "extremely rare"</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="qs">
+  <h2 id="qs"><span class="n">09</span>Open questions</h2>
+  <ol class="qs">
+    <li><div><strong>Who is "Vijay" at JHU? Is it Vishal M. Patel?</strong><div class="to">Ask: Dr. Ricanek</div></div></li>
+    <li><div><strong>Is he taking an ECE PhD student for Fall 2027, and would he consider co-advising with Saria (CS)?</strong><div class="to">Ask: Rama Chellappa, via Dr. Ricanek's introduction</div></div></li>
+    <li><div><strong>What is the ECE PhD Fall 2027 deadline, and is the GRE required for international applicants?</strong><div class="to">Ask: ECE graduate admissions</div></div></li>
+    <li><div><strong>What is the minimum ECE course load per semester, and can UNCW MS courses reduce it?</strong><div class="to">Ask: ECE graduate office</div></div></li>
+    <li><div><strong>Would my two UNCW graduate ML/vision courses count toward the 8-course requirement?</strong><div class="to">Ask: CS graduate office (only if you go the CS route)</div></div></li>
+    <li><div><strong>Which semesters do EN.520.612, 520.661 and 520.681 usually run?</strong><div class="to">Ask: ECE graduate office</div></div></li>
+  </ol>
+  <div class="glance" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr))">
+    <div><span class="eyebrow">CS PhD admissions</span><span class="copy"><code id="em1">admissions@cs.jhu.edu</code><button type="button" data-copy="em1">Copy</button></span></div>
+    <div><span class="eyebrow">D.Eng program (for reference)</span><span class="copy"><code id="em2">wse-deng@jhu.edu</code><button type="button" data-copy="em2">Copy</button></span></div>
+  </div>
+</section>
+
+<section aria-labelledby="src">
+  <h2 id="src"><span class="n">10</span>Sources</h2>
+  <ul class="sources">
+    <li><a href="https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/electrical-computer-engineering/electrical-computer-engineering-phd/" target="_blank" rel="noopener">JHU Catalogue 2026–27: ECE PhD</a> · <a href="https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/computer-science/computer-science-phd/" target="_blank" rel="noopener">CS PhD</a> · <a href="https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/electrical-computer-engineering/" target="_blank" rel="noopener">ECE courses</a></li>
+    <li><a href="https://www.cs.jhu.edu/fall26" target="_blank" rel="noopener">CS Fall 2026 course listings</a> · <a href="https://www.cs.jhu.edu/spring26" target="_blank" rel="noopener">CS Spring 2026 course listings</a></li>
+    <li><a href="https://www.cs.jhu.edu/academic-programs/graduate-studies/phd-program/phd-admissions-faqs" target="_blank" rel="noopener">CS PhD admissions FAQ</a> (deadline, GRE, English waiver, funding)</li>
+    <li><a href="https://e-catalogue.jhu.edu/engineering/full-time-residential-programs/degree-programs/doctor-engineering/engineering-doctor/engineering-doctor.pdf" target="_blank" rel="noopener">JHU Catalogue: Doctor of Engineering</a></li>
+    <li><a href="https://engineering.jhu.edu/news/rama-chellappa-receives-2025-azriel-rosenfeld-lifetime-achievement-award/" target="_blank" rel="noopener">Chellappa: 2025 Azriel Rosenfeld award</a> · <a href="https://mathiasunberath.github.io" target="_blank" rel="noopener">Unberath</a> · arXiv API (Chellappa, Patel, Saria, Yuille), checked 2026-10-19</li>
+    <li>Third-party, for the ECE deadline estimate only: <a href="https://www.petersons.com/graduate-schools/the-johns-hopkins-university-g-w-c-whiting-school-of-engineering-department-of-electrical-and-computer-engineering-000_10014190.aspx" target="_blank" rel="noopener">Peterson's</a></li>
+  </ul>
+</section>
+
+<footer>Part of Atul Prem Patnala's Fall 2027 PhD screening. Facts come from primary sources unless labeled. CS course descriptions are inferred from titles, and most ECE terms weren't available. Last checked 2026-10-19.</footer>
+</div>
+
+<script>
+/* [code, title, credits, terms, lists, fit, math, what it covers]
+   lists: APPL/RSNG/SOFT/SYST/THRY = CS area designator; ECE courses use ''.
+   CS terms from the Fall 2026 / Spring 2026 department listings; CS descriptions inferred from titles.
+   ECE descriptions paraphrased from the 2026-27 catalogue; ECE terms mostly not published ('—'). */
+var COURSES = [
+['EN.601.604','Brain & Computation','1','Spring','',0,'M','Inferred from title: links between neuroscience and computation.'],
+['EN.601.606','Next-Gen Networks: Space, Wireless & Edge','3','Fall','SYST',0,'M','Inferred from title: satellite, wireless and edge networking.'],
+['EN.601.612','Big Data Systems','3','Fall','SYST',2,'M','Inferred from title: systems for storing and processing very large datasets.'],
+['EN.601.613','Software Defined Networks','3','Spring','SYST',0,'M','Inferred from title: programmable network control.'],
+['EN.601.614','Computer Networks','3','Fall, Spring','SYST',0,'M','Inferred from title: network protocols and architecture.'],
+['EN.601.615','Databases','3','Fall, Spring','SOFT',1,'M','Inferred from title: database design and query systems.'],
+['EN.601.616','Embedded Systems & Wireless IoT','3','Spring','SYST',0,'M','Inferred from title: embedded devices and IoT networking.'],
+['EN.601.618','Operating Systems','3','Spring','SYST',0,'M','Inferred from title: OS design and implementation.'],
+['EN.601.620','Parallel Programming & Performance Engineering','3','Fall','SYST',0,'M','Inferred from title: writing and tuning parallel programs.'],
+['EN.601.621','Object Oriented Software Engineering','3','Fall, Spring','SOFT',0,'L','Inferred from title: designing larger software with OO methods.'],
+['EN.601.622','Software Testing & Debugging','3','Spring','SOFT',0,'L','Inferred from title: testing and debugging practice.'],
+['EN.601.623','AI-Enabled Software Engineering','3','Spring','SOFT',1,'L','Inferred from title: using AI tools in software engineering.'],
+['EN.601.625','Software System Design','3','Fall','SOFT',0,'L','Inferred from title: architecture of software systems.'],
+['EN.601.626','Principles of Programming Languages','3','Spring','THRY',0,'H','Inferred from title: semantics and design of programming languages.'],
+['EN.601.628','Compilers & Interpreters','3','Fall','SOFT',0,'M','Inferred from title: building compilers and interpreters.'],
+['EN.601.629','Functional Programming in Software Engineering','3','Fall','SOFT',0,'M','Inferred from title: functional programming for real software.'],
+['EN.601.630','Combinatorics and Graph Theory in CS','3','Spring','THRY',0,'H','Inferred from title: combinatorics and graphs, proof-based.'],
+['EN.601.632','Declarative Methods','3','Spring','RSNG',0,'M','Inferred from title: logic, constraint and declarative problem solving.'],
+['EN.601.633','Intro Algorithms','3','Fall, Spring','THRY',0,'H','Inferred from title: algorithm design and analysis.'],
+['EN.601.634','Randomized & Big Data Algorithms','3','Spring','THRY',0,'H','Inferred from title: randomized and streaming algorithms.'],
+['EN.601.635','Approximation Algorithms','3','Spring','THRY',0,'H','Inferred from title: approximation algorithms, proof-based.'],
+['EN.601.638','Theory of Differential Privacy','3','Fall','THRY',0,'H','Inferred from title: mathematical privacy guarantees.'],
+['EN.601.639','Machine Learning for Single-Cell & Spatial Genomics','3','Fall','APPL',0,'M','Inferred from title: ML on genomics data.'],
+['EN.601.640','Web Security','3','Fall','SYST',0,'M','Inferred from title: attacks and defenses for web applications.'],
+['EN.601.641','Blockchains and Cryptocurrencies','3','Spring','APPL',0,'M','Inferred from title: blockchain systems.'],
+['EN.601.642','Modern Cryptography','3','Spring','THRY',0,'H','Inferred from title: cryptographic theory.'],
+['EN.601.643','Security and Privacy in Computing','3','Fall','SOFT',0,'M','Inferred from title: security and privacy principles.'],
+['EN.601.644','Medical Device Cybersecurity','3','Spring','APPL',0,'M','Inferred from title: securing medical devices.'],
+['EN.601.645','Practical Cryptographic Systems','3','Fall','SOFT',0,'M','Inferred from title: applied cryptography in real systems.'],
+['EN.601.647','Computational Genomics: Sequences','3','Fall','APPL',0,'M','Inferred from title: algorithms for DNA sequences.'],
+['EN.601.649','Computational Genomics: Applied Comparative Genomics','3','Fall','APPL',0,'M','Inferred from title: comparing genomes computationally.'],
+['EN.601.654','Introduction to Augmented Reality','3','Fall','APPL',1,'M','Inferred from title: AR systems and tracking.'],
+['EN.601.655','Computer Integrated Surgery I','3','Fall','APPL',1,'M','Inferred from title: computing and imaging in surgery.'],
+['EN.601.656','Computer Integrated Surgery II','3','Spring','APPL',1,'M','Inferred from title: continuation, surgical systems projects.'],
+['EN.601.657','Computer Graphics','3','Fall','APPL',0,'M','Inferred from title: rendering and geometric modeling.'],
+['EN.601.658','Geometry Processing','3','Spring','APPL',0,'H','Inferred from title: processing 3D meshes and shapes.'],
+['EN.601.660','Embodied AI with Web-Scale Video Data','3','Fall','APPL',2,'M','Inferred from title: learning agents and robots from large video collections.'],
+['EN.601.661','Computer Vision','3','Fall, Spring','APPL',2,'M','Inferred from title: core computer vision.'],
+['EN.601.663','Algorithms for Sensor-Based Robotics','3','Fall, Spring','APPL',1,'M','Inferred from title: robot motion and sensing algorithms.'],
+['EN.601.664','Artificial Intelligence','3','Fall, Spring','RSNG',2,'M','Inferred from title: search, reasoning and learning.'],
+['EN.601.665','Natural Language Processing','3','Fall','APPL',1,'M','Inferred from title: core NLP.'],
+['EN.601.666','Information Retrieval & Web Agents','3','Spring','APPL',1,'M','Inferred from title: search engines and web agents.'],
+['EN.601.667','Introduction to Human Language Technology','3','Fall','APPL',0,'M','Inferred from title: speech and language technology.'],
+['EN.601.668','Machine Translation','3','Fall','APPL',0,'M','Inferred from title: translation models.'],
+['EN.601.671','NLP: Self-Supervised Models','3','Fall','RSNG',1,'M','Inferred from title: self-supervised language models.'],
+['EN.601.672','NLP for Computational Social Science','3','Spring','APPL',2,'M','Inferred from title: language data for studying human behavior.'],
+['EN.601.673','Cognitive Artificial Intelligence','3','Fall','RSNG',1,'M','Inferred from title: AI modeled on human cognition.'],
+['EN.601.674','ML: Learning Theory','3','Spring','THRY',0,'H','Inferred from title: theory of machine learning.'],
+['EN.601.675','Machine Learning','3','Fall, Spring','RSNG',2,'M','Inferred from title: core machine learning.'],
+['EN.601.677','Causal Inference','3','Fall','RSNG',1,'H','Inferred from title: causal effects from data; statistical.'],
+['EN.601.678','Causal Discovery','3','Fall','RSNG',0,'H','Inferred from title: learning causal structure.'],
+['EN.601.679','ML: Reinforcement Learning','3','Fall','THRY',0,'H','Inferred from title: RL with a theory emphasis.'],
+['EN.601.682','Machine Learning: Deep Learning','3','Fall, Spring','RSNG',2,'M','Inferred from title: deep neural networks. Unberath teaches it in Fall 2026.'],
+['EN.601.683','Generative Vision: The Art & Science of Visual Synthesis','3','Fall','APPL',2,'M','Inferred from title: generative models for images and video. Relevant to deepfakes.'],
+['EN.601.685','Probabilistic Models of the Visual Cortex','3','Fall','APPL',0,'H','Inferred from title: probabilistic models of biological vision (Yuille).'],
+['EN.601.687','ML: Coping with Non-Stationary Environments and Errors','3','Fall','RSNG',2,'M','Inferred from title: ML when data drifts, which is very real-world.'],
+['EN.601.689','Human-in-the-Loop Machine Learning','3','Fall','RSNG',2,'M','Inferred from title: ML with human feedback and oversight.'],
+['EN.601.690','Intro to Human-Computer Interaction','3','Fall, Spring','SOFT',1,'L','Inferred from title: designing and studying interfaces with people.'],
+['EN.601.691','Human-Robot Interaction','3','Spring','APPL',1,'L','Inferred from title: people and robots working together.'],
+['EN.601.692','Learning-Based Vision','3','Spring','APPL',2,'M','Inferred from title: deep learning for vision.'],
+['EN.601.693','Accessible Computing','3','Fall','SOFT',0,'L','Inferred from title: computing for people with disabilities.'],
+['EN.601.694','Intro to Human-Centered AI','3','Spring','APPL',2,'L','Inferred from title: AI designed around people.'],
+['EN.601.695','Intro to Robot Learning','3','Spring','APPL',1,'M','Inferred from title: learning robot behaviors.'],
+['EN.601.697','Human-Centered Robotics: Models & Algorithms','3','Fall','APPL',1,'M','Inferred from title: modeling people for robotics.'],
+['EN.601.698','Hands-On Robot Learning','3','Fall','APPL',1,'M','Inferred from title: practical robot learning projects.'],
+['EN.601.715','Advanced Networks: Internet Measurement','3','Spring','SYST',0,'M','Inferred from title: measuring real internet behavior.'],
+['EN.601.716','Advanced Topics in Internet of Things','3','Fall','SYST',1,'M','Inferred from title: IoT systems research topics.'],
+['EN.601.727','Machine Programming','3','Fall','SOFT',0,'M','Inferred from title: AI that writes programs.'],
+['EN.601.734','Topics in ML-Augmented Algorithm Design','3','Fall','THRY',0,'H','Inferred from title: algorithms that use ML predictions.'],
+['EN.601.740','Language-Based Security','3','Spring','SYST',0,'H','Inferred from title: security via programming-language techniques.'],
+['EN.601.752','Advanced Topics in Single-Cell & Spatial Genomics','3','Spring','APPL',0,'M','Inferred from title: research topics in genomics ML.'],
+['EN.601.762','Multimodal Understanding and Generation','3','Fall','APPL',2,'M','Inferred from title: vision-language models.'],
+['EN.601.768','Language Model Agents','3','Fall','RSNG',1,'M','Inferred from title: LLM-based agents.'],
+['EN.601.770','AI Ethics and Social Impact','3','Fall','APPL',1,'L','Inferred from title: ethics and societal effects of AI.'],
+['EN.601.772','Advanced Topics in AI for Social Science Discovery','3','Fall','APPL',2,'M','Inferred from title: AI to study social behavior.'],
+['EN.601.773','Machine Social Intelligence','3','Spring','RSNG',1,'M','Inferred from title: AI that models social behavior.'],
+['EN.601.776','Modern Topics in ML Generalization','3','Spring','THRY',0,'H','Inferred from title: theory of generalization.'],
+['EN.601.779','Machine Learning: Advanced Topics','3','Fall','RSNG',1,'H','Inferred from title: advanced ML research topics.'],
+['EN.601.783','Vision as Bayesian Inference','3','Spring','APPL',1,'H','Inferred from title: probabilistic theory of vision (Yuille).'],
+['EN.601.784','The Future of Work with AI Systems','3','Spring','APPL',1,'L','Inferred from title: AI in the workplace.'],
+['EN.601.790','Advanced HCI: Research Methods','3','Spring','APPL',1,'L','Inferred from title: HCI research methods.'],
+['EN.601.794','Privacy Technology, Design, and Law','3','Fall','APPL',0,'L','Inferred from title: privacy tech and policy.'],
+['EN.601.796','Social Computing','3','Fall','APPL',1,'L','Inferred from title: online social systems and behavior.'],
+['EN.520.602','Generative Models for Computer Vision and Biomedical Imaging','3','—','',2,'M','Project-based research course on generative models for vision and biomedical imaging.'],
+['EN.520.603','Introduction to Optical Instruments','3','—','',0,'H','Optics and optical instruments used in engineering and science.'],
+['EN.520.605','Advanced Optical and Optoelectronic Instruments and Devices','3','—','',0,'H','Light propagation, polarization and electro-optic devices.'],
+['EN.520.607','Introduction to the Physics of Electronic Devices','3','—','',0,'H','Physics of electronic and optical devices.'],
+['EN.520.612','Machine Learning for Signal Processing','3','—','',2,'M','ML to model, classify and retrieve information from audio, speech, image and video.'],
+['EN.520.613','Advanced Topics in Optical Medical Imaging','3','—','',0,'H','Recent photonics advances for medical imaging and sensing.'],
+['EN.520.614','Image Processing & Analysis','3','—','',2,'M','Fundamental methods for processing and analyzing images.'],
+['EN.520.615','Image Processing & Analysis II','3','—','',1,'H','Nonlinear, morphology-based image techniques.'],
+['EN.520.617','Computation for Engineers','3','—','',0,'M','Accurate, fast, memory-efficient numerical algorithms.'],
+['EN.520.618','Modern Convex Optimization','3','—','',0,'H','Convex optimization theory and algorithms for ML and imaging.'],
+['EN.520.619','Advanced Power System Optimization','3','—','',0,'H','Optimization, including ML, for power-grid problems.'],
+['EN.520.620','Bioelectricity from Neurons to Semiconductors','3','—','',0,'H','Circuit theory and math for bioelectricity in the nervous system.'],
+['EN.520.621','Introduction To Nonlinear Systems','3','—','',0,'H','Phase plane and Lyapunov stability analysis.'],
+['EN.520.622','Principles of Complex Networked Systems','3','—','',0,'M','Modeling and analysis of complex interaction networks.'],
+['EN.520.623','Medical Image Analysis','3','Spring','',2,'M','Algorithms for processing and analyzing medical images.'],
+['EN.520.624','Integrated Photonics','3','—','',0,'H','Integrated photonic materials, fabrication and devices.'],
+['EN.520.625','Efficient Computing for AI','3','—','',0,'M','Hardware designs for AI and hardware-aware algorithms.'],
+['EN.520.627','Photovoltaics and Energy Devices','3','—','',0,'H','Photovoltaics and related energy devices.'],
+['EN.520.630','Introduction to Medical Imaging','3','—','',1,'H','X-ray, CT, ultrasound, photoacoustic and MRI principles.'],
+['EN.520.631','Ultrasound and Photoacoustic Beamforming','3','—','',0,'H','Ultrasound and photoacoustic imaging and beamforming.'],
+['EN.520.632','Medical Imaging Systems','3','—','',0,'H','Physics and signal processing of medical imaging systems.'],
+['EN.520.633','Intro To Robust Control','3','—','',0,'H','Robust analysis and control of multivariable systems.'],
+['EN.520.635','Digital Signal Processing','3','Fall','',1,'H','Processing discrete-time signals.'],
+['EN.520.637','Foundations of Reinforcement Learning','3','—','',0,'H','Rigorous RL from optimal control and dynamic programming.'],
+['EN.520.638','Deep Learning','3','Spring','',2,'M','Neural networks and deep learning architectures.'],
+['EN.520.640','Machine Intelligence on Embedded Systems','3','—','',0,'M','ML and AI on resource-limited embedded systems.'],
+['EN.520.643','Low Power FPGA Hardware for Machine Learning','3','—','',0,'M','Energy-efficient digital design for ML on FPGAs.'],
+['EN.520.644','FPGA Synthesis Lab','3','—','',0,'M','Lab in FPGA processing using VHDL.'],
+['EN.520.645','Audio Signal Processing','3','—','',0,'M','Foundations of audio and speech technologies.'],
+['EN.520.646','Wavelets & Filter Banks','3','—','',0,'H','Wavelets, multirate processing and time-frequency analysis.'],
+['EN.520.647','Information Theory','3','—','',0,'H','Mathematical models of compression and channel capacity.'],
+['EN.520.648','Compressed Sensing and Sparse Recovery','3','—','',0,'H','Recovering signals and images from few measurements.'],
+['EN.520.650','Machine Intelligence','3','Spring','',1,'M','Search, knowledge representation and reasoning under uncertainty.'],
+['EN.520.651','Random Signal Analysis','4','—','',0,'H','Probability, estimation and graphical models.'],
+['EN.520.653','Dynamics & Control of Modern Power Systems','3','—','',0,'H','Dynamics and control of power systems.'],
+['EN.520.654','Control Systems Design','3','—','',0,'H','Classical and modern control design.'],
+['EN.520.656','Data Smoothing Using Machine Learning','3','—','',1,'M','Noise-reduction filter design using cross-validation.'],
+['EN.520.657','Design of Advanced Instruments and Systems','3','—','',0,'L','Product design principles for the biomedical market.'],
+['EN.520.658','Computational Imaging','3','—','',1,'H','Imaging as an inverse problem: algorithms and applications.'],
+['EN.520.659','Machine learning for medical applications','3','—','',2,'M','AI and ML principles applied to medical data.'],
+['EN.520.661','AI and Biometric Systems: Techniques, Applications, and Ethics','3','—','',1,'M','ML in biometric authentication, including ethics. Close to Dr. Ricanek\'s field.'],
+['EN.520.663','ECE Ideation and Design Lab','3','—','',0,'L','Sponsored, multidisciplinary ECE design projects.'],
+['EN.520.665','Machine Perception','3','Fall','',2,'M','Edge detection, local features and neural networks for image and video analysis.'],
+['EN.520.666','Information Extraction','3','—','',0,'M','Statistical speech recognition and understanding.'],
+['EN.520.668','Advanced Electronic Lab Design','3','—','',0,'M','Designing microsystems from recent IEEE research.'],
+['EN.520.669','Algorithmic Generative Artificial Intelligence','3','—','',1,'H','Algorithms behind generative AI: probabilistic modeling and decisions.'],
+['EN.520.677','Applied Quantum Computing','3','—','',0,'H','Quantum computing for materials and devices.'],
+['EN.520.681','Perception for Embodied AI','3','—','',2,'M','How robots perceive with cameras, lidar, IMUs and other sensors.'],
+['EN.520.683','Bio-Photonics Laboratory','3','—','',0,'M','Optical experiments on biological materials.'],
+['EN.520.684','Generative AI for Speech and Audio','3','—','',0,'M','Generative speech and audio AI.'],
+['EN.520.685','Advanced Semiconductor Devices','3','—','',0,'H','Semiconductor devices for optical communications.'],
+['EN.520.687','Clinical Diagnostic Devices and Methods','3','—','',0,'L','Project course designing clinical diagnostic devices.'],
+['EN.520.688','Learning-enabled Multi-agent Systems','3','—','',0,'H','Multi-agent systems that learn from feedback.'],
+['EN.520.691','CAD Design of Digital VLSI Systems I','3','—','',0,'M','ASIC design flow with VLSI CAD tools.'],
+['EN.520.692','Mixed-Mode VLSI Systems','3','—','',0,'H','Mixed analog and digital CMOS circuits.'],
+['EN.520.697','Data Communications and Networking','3','—','',0,'M','Overview of data communication networks.'],
+['EN.520.698','Networks Meet Machine Learning: Methods and Applications','3','—','',1,'M','Graph-based network theory and ML over networks.']
+];
+var MATH = {}; COURSES.forEach(function (c) { MATH[c[0]] = c[6]; });
+var MATH_LABEL = { L: 'Low', M: 'Medium', H: 'High', U: 'Unknown' };
+var AREA = { APPL: 'Applications', RSNG: 'Reasoning', SOFT: 'Software', SYST: 'Systems', THRY: 'Theory' };
+
+function counts(c) {
+  var cs = c[0].indexOf('EN.601') === 0;
+  var ece = cs ? ['maybe', 'Counts*'] : ['yes', 'Counts*'];
+  var csb = cs ? (AREA[c[4]] ? ['yes', 'Area: ' + AREA[c[4]]] : ['yes', 'CS course']) : ['maybe', 'Related dept'];
+  return [ece, csb];
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
+function badge(b) { return '<span class="badge b-' + b[0] + '">' + esc(b[1]) + '</span>'; }
+
+function renderCat() {
+  var list = document.getElementById('f-list').value, term = document.getElementById('f-term').value;
+  var q = document.getElementById('f-q').value.trim().toLowerCase(), fit = document.getElementById('f-fit').checked;
+  var math = document.getElementById('f-math').value;
+  var rows = COURSES.filter(function (c) {
+    if (list.indexOf('dept:') === 0) { if (c[0].indexOf('EN.' + list.slice(5)) !== 0) return false; }
+    else if (list !== 'all' && c[4] !== list) return false;
+    if (term && c[3].indexOf(term) < 0) return false;
+    if (fit && c[5] !== 2) return false;
+    if (math && math.indexOf(c[6]) < 0) return false;
+    if (q && (c[0] + ' ' + c[1] + ' ' + c[7]).toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+  document.getElementById('cat-body').innerHTML = rows.map(function (c) {
+    var k = counts(c);
+    return '<tr><td class="code">' + esc(c[0]) + '</td><td><strong>' + esc(c[1]) + '</strong><div class="desc">' + esc(c[7]) + '</div></td><td class="num">' + esc(c[2]) + '</td><td class="terms">' + esc(c[3]) +
+      '</td><td><span class="math math-' + c[6] + '">' + MATH_LABEL[c[6]] + '</span></td><td>' + badge(k[0]) + '</td><td>' + badge(k[1]) + '</td><td>' +
+      (c[5] === 2 ? '<span class="fit2">Strong</span>' : c[5] === 1 ? '<span class="fit1">Related</span>' : '') + '</td></tr>';
+  }).join('') || '<tr><td colspan="8" class="muted">No courses match these filters. Clear the search or pick "All courses".</td></tr>';
+  document.getElementById('f-count').textContent = rows.length + ' of ' + COURSES.length + ' courses';
+}
+['f-list', 'f-term', 'f-fit', 'f-math'].forEach(function (id) { document.getElementById(id).addEventListener('change', renderCat); });
+document.getElementById('f-q').addEventListener('input', renderCat);
+renderCat();
+
+var PLANS = {
+  ece: {
+    intro: 'No required course list: you and Chellappa choose. This draft uses 8 courses (24 credits), mostly vision and ML, all Low or Medium math, and leaves room for research from year 1.',
+    transfer: 'ECE terms are only known for EN.520.665 (Fall), 520.638 and 520.623 (Spring); the others are placed by assumption. The minimum per-semester course load isn\'t stated, so ask. Qualifier timing and the GBO come from the catalogue.',
+    totals: ['Courses ~24 credits (advisor sets)', 'Qualifier by semester 4', 'GBO by semester 6'],
+    sems: [
+      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['EN.520.665', 'Machine Perception', 3, 'Counts*', 1], ['EN.601.675', 'Machine Learning', 3, 'Counts*', 1], ['EN.520.612', 'ML for Signal Processing', 3, 'Counts*', 0]], m: ['Start as a TA (funded ECE students serve as TAs)'] },
+      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['EN.520.638', 'Deep Learning', 3, 'Counts*', 1], ['EN.601.692', 'Learning-Based Vision', 3, 'Counts*', 0], ['EN.520.623', 'Medical Image Analysis', 3, 'Counts*', 0]], r: ['Research in Chellappa\'s group'] },
+      { t: 'Fall 2028', y: 'Year 2', s: 'fall', c: [['EN.601.683', 'Generative Vision', 3, 'Counts*', 0], ['EN.520.681', 'Perception for Embodied AI', 3, 'Counts*', 0]], m: ['Qualifying exam: question sets from 3 examiners, before semester 4 begins'] },
+      { t: 'Spring 2029 – Fall 2029', y: 'Years 2–3', s: 'spring', c: [], r: ['Dissertation research'], m: ['Research proposal (6 pages) + GBO oral exam before semester 6'] },
+      { t: 'Spring 2030 – Spring 2031', y: 'Years 3–4', s: 'fall', c: [], r: ['Dissertation research'], m: ['Public dissertation defense: target spring 2031 (catalogue limit: 7 years)'] }
+    ]
+  },
+  cs: {
+    intro: '8 courses (24 credits) covering 4 of the 5 areas. This plan covers Applications, Reasoning, Systems and Software and skips Theory. 7 of the 8 are CS courses (5 needed); one is an ECE elective. All are Low or Medium math.',
+    transfer: 'Up to two UNCW graduate courses may transfer with advisor approval, which would drop two electives. Terms come from the Fall 2026 and Spring 2026 listings; confirm each year. CS also needs EN.500.603 (first semester) and AS.360.625 (year 1).',
+    totals: ['8 courses = 24 credits', '2 qualifying projects by year 3', 'GBO year 3'],
+    sems: [
+      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['EN.601.675', 'Machine Learning', 3, 'Area: Reasoning', 1], ['EN.601.661', 'Computer Vision', 3, 'Area: Applications', 1], ['EN.601.612', 'Big Data Systems', 3, 'Area: Systems', 1]], m: ['EN.500.603 Graduate Academic Ethics', 'CS Seminar (EN.601.801), years 1–2'] },
+      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['EN.601.682', 'Machine Learning: Deep Learning', 3, 'Area: Reasoning', 0], ['EN.601.692', 'Learning-Based Vision', 3, 'Area: Applications', 0], ['EN.601.690', 'Intro to Human-Computer Interaction', 3, 'Area: Software', 1]], m: ['AS.360.625 Responsible Conduct of Research by end of year 1'] },
+      { t: 'Fall 2028', y: 'Year 2', s: 'fall', c: [['EN.601.687', 'ML: Coping with Non-Stationary Environments', 3, 'Area: Reasoning', 0], ['EN.520.665', 'Machine Perception', 3, 'Related dept (ECE)', 0]], m: ['Qualifying project 1 (with your advisor)', 'Coursework done by end of year 2 (B+ average)'] },
+      { t: 'Spring 2029 – Spring 2030', y: 'Years 2–3', s: 'spring', c: [], r: ['PhD research'], m: ['Qualifying project 2 (different faculty member) by end of year 3', 'One semester as TA + EN.601.807 Teaching Practicum', 'GBO oral exam (ideally year 3)'] },
+      { t: 'Fall 2030 – Spring 2031', y: 'Year 4', s: 'fall', c: [], r: ['Dissertation research'], m: ['Department seminar on your research, then the public defense (target spring 2031)'] }
+    ]
+  }
+};
+
+var LEGEND = '<div class="plan-legend"><div><strong>Counts as</strong>: which requirement the course fills. <em>Area: X</em> = one of the CS PhD\'s 4-of-5 areas; <em>Related dept</em> = an ECE elective the CS PhD accepts; <em>Counts*</em> = advisor-approved coursework for the ECE PhD (no required list).</div><div><span class="keep">must-take</span> is a separate tag: my priority for you. Take it even if some of your MS courses transfer.</div></div>';
+function renderPlan(key) {
+  var p = PLANS[key];
+  var html = '<p class="plan-note">' + esc(p.intro) + '</p><div class="totals">' + p.totals.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' + LEGEND + '<div class="sems">';
+  p.sems.forEach(function (s) {
+    var cr = s.c.reduce(function (a, c) { return a + c[2]; }, 0);
+    html += '<div class="sem ' + s.s + '"><h4>' + esc(s.t) + '<small>' + esc(s.y) + (cr ? ' · ' + cr + ' cr' : '') + '</small></h4>';
+    s.c.forEach(function (c) {
+      html += '<div class="crs"><span class="code">' + esc(c[0].replace('EN.', '')) + '</span><span>' + esc(c[1]) + (c[4] ? '<span class="keep">must-take</span>' : '') + '</span><span class="cr">' + c[2] + '</span><span class="why">Counts as: ' + esc(c[3]) + (MATH[c[0]] ? ' · Math: ' + MATH_LABEL[MATH[c[0]]] : '') + '</span></div>';
+    });
+    (s.r || []).forEach(function (r) { html += '<div class="mile res">' + esc(r) + '</div>'; });
+    (s.m || []).forEach(function (m) { html += '<div class="mile">' + esc(m) + '</div>'; });
+    html += '</div>';
+  });
+  html += '</div><p class="muted" style="font-size:13px">' + esc(p.transfer) + '</p>';
+  document.getElementById('plan-panel').innerHTML = html;
+  document.getElementById('plan-panel').setAttribute('aria-labelledby', 't-' + key);
+}
+document.querySelectorAll('.tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+    renderPlan(tab.getAttribute('data-plan'));
+  });
+});
+renderPlan('ece');
+
+document.querySelectorAll('[data-copy]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.getAttribute('data-copy'));
+    var text = el.textContent;
+    function done(ok) { btn.textContent = ok ? 'Copied' : 'Select'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); }
+    function selectIt() { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+    try { navigator.clipboard.writeText(text).then(function () { done(true); }, function () { selectIt(); done(false); }); }
+    catch (e) { selectIt(); done(false); }
+  });
+});
+</script>
+
+</body>
+</html>
