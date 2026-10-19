@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<title>MSU PhD Dossier</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@500;600&display=swap">
+</head>
+<body>
+<style>
+/* Layout: an admissions dossier — summary strip, then numbered sections in reading order, one narrow column with wide tables scrolling in place. */
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --ink: #1b2420;
+  --muted: #5b6862;
+  --rule: #d9dfdb;
+  --accent: #1d5b47;
+  --accent-soft: #e3efe9;
+  --warn: #8a5a00;
+  --warn-soft: #fbf1dc;
+  --bad: #9b2c2c;
+  --bad-soft: #f8e4e2;
+  --seg1: #1d5b47; --seg2: #4f8f78; --seg3: #9cc4b3; --seg4: #c9b27c; --seg5: #8d7bb0; --seg6: #b9b2cf; --seg7: #6b7a85;
+  --display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121715; --surface: #1a211e; --ink: #e6ece9; --muted: #9aa8a1; --rule: #2c3631;
+    --accent: #7cc4a6; --accent-soft: #1f3129; --warn: #e2b55a; --warn-soft: #2e2716; --bad: #ef8f86; --bad-soft: #352020;
+    --seg1: #7cc4a6; --seg2: #4f9a7f; --seg3: #2f6a56; --seg4: #b89d5e; --seg5: #9d8cc4; --seg6: #6b6290; --seg7: #7d8b95;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121715; --surface: #1a211e; --ink: #e6ece9; --muted: #9aa8a1; --rule: #2c3631;
+  --accent: #7cc4a6; --accent-soft: #1f3129; --warn: #e2b55a; --warn-soft: #2e2716; --bad: #ef8f86; --bad-soft: #352020;
+  --seg1: #7cc4a6; --seg2: #4f9a7f; --seg3: #2f6a56; --seg4: #b89d5e; --seg5: #9d8cc4; --seg6: #6b6290; --seg7: #7d8b95;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--body); }
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 600; }
+h2 { font-size: 22px; font-weight: 600; display: flex; gap: 10px; align-items: baseline; }
+h2 .n { font-family: var(--mono); font-size: 13px; color: var(--muted); font-weight: 400; }
+h3 { font-size: 17px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 13px; }
+.muted { color: var(--muted); }
+section { display: grid; gap: 16px; }
+header { display: grid; gap: 14px; border-bottom: 1px solid var(--rule); padding-bottom: 24px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 12px/1 var(--body); padding: 6px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.plain { background: transparent; border: 1px solid var(--rule); color: var(--muted); }
+
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.glance > div { background: var(--surface); padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.glance .big { font: 600 20px/1.25 var(--display); }
+
+.callout { background: var(--surface); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 6px; padding: 16px 18px; display: grid; gap: 8px; }
+.callout.warn { border-left-color: var(--warn); }
+.callout.bad { border-left-color: var(--bad); }
+blockquote { margin: 0; padding-left: 12px; border-left: 2px solid var(--rule); color: var(--muted); font-style: italic; }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--rule); }
+th { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* credit bars */
+.bars { display: grid; gap: 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; }
+.bar-row { display: grid; grid-template-columns: 170px 1fr; gap: 12px; align-items: center; }
+.bar-row .lbl { font-weight: 500; font-size: 14px; }
+.bar-row .lbl small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+.bar { display: flex; height: 30px; border-radius: 4px; overflow: hidden; min-width: 0; }
+.bar span { display: flex; align-items: center; justify-content: center; font: 500 11px/1 var(--mono); color: #fff; white-space: nowrap; overflow: hidden; border-right: 1px solid var(--surface); }
+.bar span:last-child { border-right: 0; }
+.s1 { background: var(--seg1); } .s2 { background: var(--seg2); } .s3 { background: var(--seg3); color: var(--ink) !important; } .s4 { background: var(--seg4); color: #1b2420 !important; } .s5 { background: var(--seg5); } .s6 { background: var(--seg6); color: #1b2420 !important; } .s7 { background: var(--seg7); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+@media (max-width: 560px) { .bar-row { grid-template-columns: 1fr; gap: 6px; } }
+
+/* program cards */
+.programs { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.prog { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.prog.pick { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+.prog ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+.verdict { font: 600 12px/1 var(--body); }
+.verdict.good { color: var(--accent); } .verdict.mid { color: var(--warn); } .verdict.no { color: var(--bad); }
+
+.courses { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px 20px; margin: 0; padding: 0; list-style: none; }
+.courses li { display: grid; grid-template-columns: 78px 1fr; gap: 8px; font-size: 14px; padding: 6px 0; border-bottom: 1px dashed var(--rule); }
+.courses .code { font-family: var(--mono); font-size: 12.5px; color: var(--accent); padding-top: 1px; }
+
+/* PI cards */
+.pis { display: grid; gap: 14px; }
+.pi { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.pi > summary { list-style: none; cursor: pointer; padding: 16px; display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: start; }
+.pi > summary::-webkit-details-marker { display: none; }
+.pi > summary .who { display: grid; gap: 4px; min-width: 0; }
+.pi > summary .role { color: var(--muted); font-size: 13.5px; }
+.pi > summary .tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.pi > summary .why { grid-column: 1 / -1; font-size: 14px; }
+.pi > summary .toggle { grid-column: 1 / -1; font: 500 12px/1 var(--mono); color: var(--accent); }
+.pi[open] > summary .toggle::after { content: " — hide papers"; }
+.pi:not([open]) > summary .toggle::after { content: " — show papers"; }
+.pi .body { padding: 0 16px 16px; display: grid; gap: 12px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.pubs { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.pubs li { display: grid; grid-template-columns: 46px 1fr; gap: 10px; font-size: 14px; }
+.pubs .yr { font-family: var(--mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 1px; }
+.pubs .venue { color: var(--muted); font-size: 13px; }
+.tier { font: 600 11px/1 var(--mono); padding: 5px 8px; border-radius: 4px; }
+.tier.A { background: var(--accent); color: var(--surface); }
+.tier.B { background: var(--accent-soft); color: var(--accent); }
+.tier.C { background: var(--warn-soft); color: var(--warn); }
+@media (max-width: 560px) { .pi > summary { grid-template-columns: 1fr; } .pi > summary .tags { justify-content: flex-start; } }
+
+/* timeline */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-left: 2px solid var(--rule); margin-left: 6px; }
+.timeline li { position: relative; padding: 0 0 18px 20px; display: grid; gap: 2px; }
+.timeline li::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
+.timeline li.hard::before { background: var(--bad); border-color: var(--bad); }
+.timeline li.soft::before { border-color: var(--warn); }
+.timeline .when { font: 500 13px/1.3 var(--mono); }
+
+/* questions */
+.qs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: q; }
+.qs li { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; grid-template-columns: 28px 1fr; gap: 10px; counter-increment: q; }
+.qs li::before { content: counter(q); font: 600 13px/1.6 var(--mono); color: var(--accent); }
+.qs .to { font-size: 12.5px; color: var(--muted); }
+.copy { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.copy code { font: 13px var(--mono); background: var(--accent-soft); color: var(--accent); padding: 3px 7px; border-radius: 4px; user-select: all; overflow-wrap: anywhere; }
+.copy button { font: 500 12px var(--body); border: 1px solid var(--rule); background: var(--surface); color: var(--ink); border-radius: 4px; padding: 3px 8px; cursor: pointer; }
+.copy button:hover { border-color: var(--accent); }
+
+.sources { font-size: 13px; color: var(--muted); display: grid; gap: 4px; padding-left: 18px; margin: 0; }
+footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+/* which-PhD cards */
+.which { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.wcard { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.wcard.pick { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+.wcard .q { font: italic 500 16px/1.4 var(--display); }
+.kws { display: flex; flex-wrap: wrap; gap: 6px; }
+.kw { font: 500 12px/1 var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.wcard.alt .kw { background: var(--bg); color: var(--ink); border: 1px solid var(--rule); }
+.wcard dl { margin: 0; display: grid; gap: 8px; font-size: 14px; }
+.wcard dt { font: 500 11px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.wcard dd { margin: 0; }
+
+/* catalogue */
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field select, .field input[type="search"] { font: 14px var(--body); padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.field.check { display: flex; gap: 6px; align-items: center; font-size: 14px; padding-bottom: 6px; }
+.toolbar .count { margin-left: auto; font: 12px var(--mono); color: var(--muted); padding-bottom: 8px; }
+.cat { max-height: 560px; overflow: auto; }
+.cat thead th { position: sticky; top: 0; z-index: 1; }
+.cat td.code { font: 12.5px var(--mono); color: var(--accent); white-space: nowrap; }
+.cat td.terms { font-size: 13px; white-space: nowrap; }
+.badge { display: inline-block; font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 3px; white-space: nowrap; }
+.b-req { background: var(--accent); color: var(--surface); }
+.b-yes { background: var(--accent-soft); color: var(--accent); }
+.b-maybe { background: var(--warn-soft); color: var(--warn); }
+.b-no { color: var(--muted); border: 1px dashed var(--rule); }
+.fit2 { font-weight: 600; color: var(--accent); font-size: 13px; white-space: nowrap; }
+.fit1 { color: var(--muted); font-size: 13px; white-space: nowrap; }
+
+/* plan */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--rule); }
+.tab { font: 500 14px var(--body); padding: 8px 12px; border: 0; background: none; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.sems { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.sem { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.sem.fall { box-shadow: inset 0 3px 0 var(--seg4); }
+.sem.spring { box-shadow: inset 0 3px 0 var(--seg2); }
+.sem.summer { box-shadow: inset 0 3px 0 var(--seg6); }
+.sem h4 { margin: 0; font: 600 15px/1.3 var(--display); display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.sem h4 small { font: 12px var(--mono); color: var(--muted); font-weight: 400; }
+.crs { display: grid; grid-template-columns: 70px 1fr auto; gap: 2px 8px; font-size: 13.5px; align-items: baseline; }
+.crs .code { font: 12px var(--mono); color: var(--accent); }
+.crs .cr { font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.crs .why { grid-column: 2 / -1; font-size: 12px; color: var(--muted); }
+.crs .keep { font: 500 10px/1 var(--mono); color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 2px 4px; margin-left: 4px; vertical-align: 1px; }
+.mile { font-size: 13px; padding: 6px 8px; border-radius: 4px; background: var(--warn-soft); color: var(--warn); }
+.mile.res { background: var(--accent-soft); color: var(--accent); }
+.totals { font: 13px var(--mono); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.cat .desc { font-size: 12.5px; color: var(--muted); margin-top: 2px; max-width: 56ch; }
+.math { font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 3px; white-space: nowrap; }
+.math-L { background: var(--accent-soft); color: var(--accent); }
+.math-M { background: var(--warn-soft); color: var(--warn); }
+.math-H { background: var(--bad-soft); color: var(--bad); }
+.plan-legend { display: grid; gap: 6px; font-size: 13px; color: var(--muted); background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 10px 12px; }
+.facts { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.math-U { background: transparent; color: var(--muted); border: 1px dashed var(--rule); }
+.chip.ric { background: var(--warn-soft); color: var(--warn); }
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">School dossier · 2 of N · verified 2026-10-19</span>
+  <h1>Michigan State University</h1>
+  <p class="muted">East Lansing, MI · College of Engineering: Computer Science &amp; Engineering (CSE) and Electrical &amp; Computer Engineering (ECE)</p>
+  <div class="chips">
+    <span class="chip ric">Dr. Ricanek's list: Arun Ross</span>
+    <span class="chip">2 PIs with explicit Fall 2027 openings</span>
+    <span class="chip">GRE optional for the CSE PhD</span>
+    <span class="chip plain">Target start: Fall 2027</span>
+  </div>
+</header>
+
+<section aria-labelledby="glance">
+  <h2 id="glance"><span class="n">00</span>At a glance</h2>
+  <div class="glance">
+    <div><span class="eyebrow">Recommended path</span><span class="big">PhD, Computer Science (CSE)</span><span class="muted">Ross via Dr. Ricanek; Yu Kong has openings for Fall 2027</span></div>
+    <div><span class="eyebrow">Fall 2027 deadline (CSE PhD)</span><span class="big">Dec 31, 2026</span><span class="muted">For full fellowship consideration. Applications close Jan 15, 2027.</span></div>
+    <div><span class="eyebrow">Funding</span><span class="big">Assistantships, no MOU</span><span class="muted">"All outstanding applicants are automatically considered" for TA/RA and fellowships</span></div>
+    <div><span class="eyebrow">Professional doctorate?</span><span class="big">None found</span><span class="muted">MSU Engineering lists MS and PhD only, so section 05 is short</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="which">
+  <h2 id="which"><span class="n">01</span>Which PhD? The two in plain terms</h2>
+  <p>Both are research PhDs in the College of Engineering. The difference is what your thesis contributes and how you prove readiness in years 1–2.</p>
+  <div class="which">
+    <article class="wcard pick">
+      <span class="eyebrow">Computer Science (CSE) · recommended</span>
+      <p class="q">"How do you build better computing methods for vision, behavior and sensing?"</p>
+      <div class="kws"><span class="kw">Core CS</span><span class="kw">Breadth in 3 areas</span><span class="kw">Paper-synthesis qualifier</span></div>
+      <dl>
+        <div><dt>Your work would be</dt><dd>New ML and vision methods on real human data: deepfakes and face analysis (Ross), human motion and video (Kong), mobile health sensing (Li)</dd></div>
+        <div><dt>Example thesis</dt><dd>Detecting deepfakes in real surveillance footage under poor lighting and compression</dd></div>
+        <div><dt>Coursework</dt><dd>Courses across three breadth areas, including <strong>one Theory &amp; Algorithms course (all math-heavy)</strong>. With an outside MS you can ask to waive up to 24 of the 30 coursework credits.</dd></div>
+        <div><dt>Exams · funding</dt><dd>A qualifier in your 3rd semester: synthesize 3 papers, then a 45-min oral. Department assistantships.</dd></div>
+      </dl>
+    </article>
+    <article class="wcard alt">
+      <span class="eyebrow">Electrical &amp; Computer Engineering (ECE)</span>
+      <p class="q">"How do you build sensing and perception systems that work on real signals and hardware?"</p>
+      <div class="kws"><span class="kw">Signals &amp; systems</span><span class="kw">Qualifier by course grades</span><span class="kw">Closer to hardware</span></div>
+      <dl>
+        <div><dt>Your work would be</dt><dd>Sensor fusion for autonomous vehicles and agriculture: radar-camera and LiDAR 3D detection (Morris)</dd></div>
+        <div><dt>Example thesis</dt><dd>Fusing radar and camera for 3D object detection in bad weather</dd></div>
+        <div><dt>Coursework</dt><dd>The most coursework: 3 qualifying core courses (average 3.5), one graduate math, stats or physics course, more ECE credits</dd></div>
+        <div><dt>Exams · funding</dt><dd>Qualifier Part A (grades) + Part B (research project) within 2 years. Admission is "linked to the availability of support".</dd></div>
+      </dl>
+    </article>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th></th><th>Computer Science (CSE)</th><th>Electrical &amp; Computer Eng. (ECE)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Fit with your areas</strong></td><td>Best: vision, behavior, deepfakes, health sensing</td><td>Good for driving perception only</td></tr>
+        <tr><td><strong>Coursework load</strong></td><td>30 credits; up to 24 waivable with an outside MS</td><td>36 credits beyond the bachelor's</td></tr>
+        <tr><td><strong>Math-heavy requirement</strong></td><td>One Theory &amp; Algorithms course (unless waived)</td><td>Core courses such as Linear Systems and Control, plus a graduate math or stats course</td></tr>
+        <tr><td><strong>GRE (international)</strong></td><td>"Highly recommended but not required"</td><td>Required</td></tr>
+        <tr><td><strong>PIs with Fall 2027 openings</strong></td><td>Yu Kong (stated), Tianxing Li (funded positions)</td><td>None found</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted">Bottom line: CSE is the better route. ECE also requires an undergraduate degree in ECE or a closely related field, with no provisional admission.</p>
+</section>
+
+<section aria-labelledby="progs">
+  <h2 id="progs"><span class="n">02</span>Programs offered: how the credits split</h2>
+  <p>MSU counts the minimum coursework plus at least 24 dissertation credits. There is no fixed 72-credit total as at CSU. Figures are from the College of Engineering's 2026–27 Graduate Handbook.</p>
+  <div class="bars" role="img" aria-label="Credit breakdown of the two programs">
+    <div class="bar-row"><div class="lbl">PhD Computer Science<small>54 credits minimum</small></div>
+      <div class="bar"><span class="s5" style="flex:18" title="Breadth courses: 18 credits, at least one per area">18 breadth</span><span class="s3" style="flex:12" title="Other coursework, 12 credits">12 other</span><span class="s1" style="flex:24" title="CSE 999 Doctoral Dissertation Research, 24+ credits">24+ dissertation</span></div></div>
+    <div class="bar-row"><div class="lbl">PhD Electrical &amp; Computer Eng.<small>60 credits minimum</small></div>
+      <div class="bar"><span class="s4" style="flex:9" title="3 PhD Qualifying Core Courses">9 qual. core</span><span class="s7" style="flex:3" title="One 800+ course outside Engineering (MTH/STT/PHY)">3</span><span class="s3" style="flex:24" title="Other 800-level coursework">24 other</span><span class="s1" style="flex:24" title="ECE 999 Doctoral Dissertation Research, 24+ credits">24+ dissertation</span></div></div>
+    <div class="legend">
+      <span><i class="s1"></i>Dissertation research</span><span><i class="s5"></i>CSE breadth courses</span><span><i class="s4"></i>ECE qualifying core</span><span><i class="s3"></i>Other coursework</span><span><i class="s7"></i>Outside-engineering course</span>
+    </div>
+  </div>
+
+  <div class="programs">
+    <article class="prog pick">
+      <span class="verdict good">Recommended</span>
+      <h3>PhD in Computer Science (CSE)</h3>
+      <ul>
+        <li>30 credits of coursework (24+ at the 800 level) + at least 24 credits of <span class="mono">CSE 999</span></li>
+        <li>18 credits of breadth with at least one course each in <strong>System Design &amp; Analysis</strong>, <strong>Theory &amp; Algorithms</strong> and <strong>Data Analysis &amp; Applications</strong></li>
+        <li>Finish breadth by the end of semester 3 (with an MS) or semester 4 (without)</li>
+        <li>Attend 75% of colloquium and seminar talks in years 1–2</li>
+        <li>Qualifier, comprehensive exam (proposal) by end of year 4, final defense (typically by year 5)</li>
+        <li>PIs: Ross, Kong, Li, Boddeti</li>
+      </ul>
+    </article>
+    <article class="prog">
+      <span class="verdict mid">Option for driving perception</span>
+      <h3>PhD in Electrical &amp; Computer Engineering</h3>
+      <ul>
+        <li>36 credits of coursework beyond the bachelor's, all at 800+, + at least 24 credits of <span class="mono">ECE 999</span></li>
+        <li>Qualifier Part A: 3 core courses from 2+ areas, average ≥ 3.5, each ≥ 3.0</li>
+        <li>Qualifier Part B: a research project with a written report and oral exam. Both parts within 2 years.</li>
+        <li>One 800+ course outside Engineering (e.g. MTH, STT, PHY)</li>
+        <li>Attend 7 seminars in year 1. No 800/900 independent-study credits count.</li>
+        <li>PI: Morris</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="callout" id="transfer">
+    <h3>Can your UNCW master's count? Yes, as a waiver of coursework, not a lump-sum transfer.</h3>
+    <p>MSU works differently from CSU. You don't transfer the degree; you ask to have requirements waived.</p>
+    <ul class="facts">
+      <li><strong>CSE PhD:</strong> "PhD students who earned a MS degree or its equivalent from outside MSU may receive permission to waive up to 24 credits of the 30 non-research credits." Request it "no later than the fifth week" of the PhD. Give your advisor your transcript and <strong>a syllabus for each course</strong>, with "a detailed description of topics covered and assigned textbooks". The Graduate Program Director decides which credits <em>and breadth areas</em> are waived.</li>
+      <li><strong>College-wide (applies to ECE too):</strong> "PhD students may ask their guidance committee to consider graduate-level courses completed prior to the doctoral program." Approval is noted in your program plan, and formal transfer is "usually not necessary". ECE also lets up to 3 credits of master's thesis research count.</li>
+      <li><strong>MS thesis bonus (CSE):</strong> if you write an MS thesis, you can apply within 2 weeks of starting to use it as the written part of the qualifying exam.</li>
+      <li><strong>Do now:</strong> save a syllabus for every UNCW graduate course (topics + textbook). You'll need them in week 1.</li>
+    </ul>
+    <p class="muted" style="font-size:13px">Best case for the CSE PhD: waive 24 credits, take about 2 courses, and get the Theory &amp; Algorithms requirement waived through your MS coursework. Confirm that last part (question 1 below).</p>
+  </div>
+</section>
+
+<section aria-labelledby="cat">
+  <h2 id="cat"><span class="n">03</span>Course catalogue</h2>
+  <p>The PhD-relevant graduate courses named in MSU's 2026–27 Engineering Graduate Handbook: every CSE breadth course and the ECE qualifying core.</p>
+  <div class="callout warn">
+    <p><strong>Two gaps.</strong> MSU's Registrar course pages only load in a browser with JavaScript, so I couldn't read official course descriptions or which semester each course runs. The one-line descriptions below are <em>inferred from the course titles</em>, and "Offered" is blank for every course. Check the <a href="https://reg.msu.edu/Courses/Search.aspx" target="_blank" rel="noopener">MSU course search</a> or the Schedule of Courses before planning. Some ECE core-course titles also weren't in any readable source; they're marked "Title not found".</p>
+  </div>
+  <div class="toolbar" role="group" aria-label="Filter courses">
+    <div class="field"><label class="eyebrow" for="f-list">List</label>
+      <select id="f-list">
+        <option value="all">All courses</option>
+        <option value="S">CSE breadth · System Design</option>
+        <option value="T">CSE breadth · Theory &amp; Algorithms</option>
+        <option value="D">CSE breadth · Data Analysis</option>
+        <option value="dept:ECE">ECE courses</option>
+        <option value="Q">ECE qualifying core</option>
+      </select></div>
+    <div class="field"><label class="eyebrow" for="f-q">Search</label><input id="f-q" type="search" placeholder="e.g. vision"></div>
+    <div class="field"><label class="eyebrow" for="f-math">Math load</label>
+      <select id="f-math"><option value="">Any</option><option value="L">Low only</option><option value="LM">Low or medium</option></select></div>
+    <label class="field check" for="f-fit"><input id="f-fit" type="checkbox"> Strong fit only</label>
+    <span class="count" id="f-count" aria-live="polite"></span>
+  </div>
+  <div class="tablewrap cat">
+    <table>
+      <thead><tr><th>Code</th><th>Course · what it covers</th><th>Cr</th><th>Offered</th><th>Math</th><th>CSE PhD</th><th>ECE PhD</th><th>Fit for you</th></tr></thead>
+      <tbody id="cat-body"></tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px"><strong>Math load</strong> is my estimate from the course title (catalog text wasn't readable). <em>Low</em>: conceptual or applied. <em>Medium</em>: statistics or linear algebra as tools. <em>High</em>: proofs, derivations or heavy theory. <em>Unknown</em>: no title found. Every course in the <strong>Theory &amp; Algorithms</strong> area is rated High, and the CSE PhD requires one of them unless it's waived.</p>
+  <p class="muted" style="font-size:13px">"Breadth: …" = counts toward the CSE PhD's 18 breadth credits in that area. "Qual. core (area)" = one of the ECE qualifying core courses. "Counts*" = 800-level coursework that can count with advisor and guidance-committee approval.</p>
+</section>
+
+<section aria-labelledby="plan">
+  <h2 id="plan"><span class="n">04</span>Proposed course plan, Fall 2027 to 2031</h2>
+  <p>A draft schedule for each PhD. <strong>Semester placement is my assumption</strong> because the course terms weren't available; confirm each course's term before relying on it. The qualifying exam timing comes from the handbook.</p>
+  <div class="tabs" role="tablist" aria-label="Plan by program">
+    <button class="tab" role="tab" id="t-cse" aria-controls="plan-panel" aria-selected="true" data-plan="cse">Computer Science (CSE)</button>
+    <button class="tab" role="tab" id="t-ece" aria-controls="plan-panel" aria-selected="false" data-plan="ece">Electrical &amp; Computer Eng.</button>
+  </div>
+  <div id="plan-panel" role="tabpanel" style="display:grid;gap:12px"></div>
+  <p class="muted" style="font-size:13px">Courses must go on a program plan filed within one semester of forming your guidance committee (CSE: by semester 3). Extra courses can be required by the committee.</p>
+</section>
+
+<section aria-labelledby="deng">
+  <h2 id="deng"><span class="n">05</span>Professional doctorate</h2>
+  <div class="callout">
+    <h3>None found at MSU Engineering. The research PhD is the only doctorate.</h3>
+    <p>The College of Engineering lists MS and PhD programs only. So the "would they find an employer for me?" question doesn't come up here: every MSU doctoral path is a funded research PhD. (Michigan's D.Eng programs are at UM–Ann Arbor and UM–Dearborn, both built for working professionals.)</p>
+  </div>
+</section>
+
+<section aria-labelledby="pis">
+  <h2 id="pis"><span class="n">06</span>Possible PIs and their recent work</h2>
+  <div class="callout">
+    <h3>The strongest angle: Ross through Dr. Ricanek, plus Kong's openings</h3>
+    <p>Ross works on <strong>deepfake detection</strong> (surveillance video and audio, 2026), your exact topic with Dr. Ricanek, who can introduce you. Yu Kong, in the same department, has <strong>stated openings for Fall 2027</strong>, works on human-centric video, and lists a 2026 media-forensics paper. A Ross + Kong co-advising pitch, deepfakes and human behavior in real video, plays to both your experience and your Area 1/2 interests. Ross also co-authors with Flynn and Czajka at Notre Dame (2026), so Ricanek's network overlaps here.</p>
+  </div>
+
+  <div class="pis">
+    <details class="pi" open>
+      <summary>
+        <div class="who"><h3>Arun Ross</h3><span class="role">Professor, CSE (Martin J. Vanderploeg Endowed Professor per MSU directory) · iPRoBe Lab · Site Director, NSF CITeR</span></div>
+        <div class="tags"><span class="chip ric">Dr. Ricanek's list</span><span class="tier C">TIER C</span><span class="chip plain">recruiting: unverified</span></div>
+        <p class="why">Biometrics-centered, which you ranked low, but his current deepfake detection work matches your project with Dr. Ricanek, and a warm introduction is possible. His lab website's publication list stops in 2018, so the papers below come from arXiv.</p>
+        <span class="toggle">2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>CCDF: A Benchmark Dataset for Deepfake Detection in Surveillance Footage <span class="venue">· arXiv · w/ Chopin, Swearingen, Dantcheva, Rathgeb</span></span></li>
+          <li><span class="yr">2026</span><span>Probing Speaker Identity Sensitivity in Audio Deepfake Detectors <span class="venue">· arXiv · w/ D. K. Dar</span></span></li>
+          <li><span class="yr">2026</span><span>Unmasking Face Embeddings: Reading, Rendering and Naming with Foundation Models <span class="venue">· arXiv · w/ Rubab, Tong</span></span></li>
+          <li><span class="yr">2026</span><span>Enhancing Single-Image Facial Demorphing using Multimodal Large Language Models <span class="venue">· arXiv · w/ N. Shukla</span></span></li>
+          <li><span class="yr">2026</span><span>S2H-DPO: Hardness-Aware Preference Optimization for Vision-Language Models <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>Beyond Mortality: Advancements in Post-Mortem Iris Recognition <span class="venue">· arXiv · w/ Flynn, Bowyer, Czajka (Notre Dame)</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Sources: arXiv API; i-PRoBe lab page; MSU engineering directory. Endowed-chair title differs across sources.</p>
+      </div>
+    </details>
+
+    <details class="pi" open>
+      <summary>
+        <div class="who"><h3>Yu Kong</h3><span class="role">Assistant Professor, CSE · ACTION Lab</span></div>
+        <div class="tags"><span class="tier A">TIER A</span><span class="chip">recruiting: yes</span></div>
+        <p class="why">Human-centric machine intelligence: human motion, human-object interaction, video understanding, generative video. His page says: "We have openings for Fall 2027 for Ph.D. students, Visiting Scholars, and Research Assistants." He also notes he can't reply to every applicant, so a referral helps.</p>
+        <span class="toggle">2025–2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>H-Flow: Self-supervised Human Scene Flow via Physics-inspired Joint Multi-modal Learning <span class="venue">· NeurIPS 2026 · w/ Xiaoming Liu (UNC)</span></span></li>
+          <li><span class="yr">2026</span><span>Show Me: Generating Instructional Videos with Diffusion Models <span class="venue">· WACV 2026</span></span></li>
+          <li><span class="yr">2026</span><span>DynamicHOI: Coupled Dynamics for Physics-aware HOI Reconstruction <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2026</span><span>NoisEasier: Test-Time Noise Optimization for Text-to-Video Generation <span class="venue">· arXiv</span></span></li>
+          <li><span class="yr">2025</span><span>Learning Human-centric Motion Representation for Action Analysis <span class="venue">· CVPR 2025 (Highlight)</span></span></li>
+          <li><span class="yr">2025</span><span>IndustryEQA: Embodied Question Answering in Industrial Scenarios <span class="venue">· NeurIPS 2025 (Datasets &amp; Benchmarks)</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Sources: his homepage (also lists an FG 2026 media-forensics paper without a title) and arXiv.</p>
+      </div>
+    </details>
+
+    <details class="pi">
+      <summary>
+        <div class="who"><h3>Tianxing Li</h3><span class="role">Assistant Professor, CSE · mobile sensing and mobile health</span></div>
+        <div class="tags"><span class="tier B">TIER B</span><span class="chip">recruiting: yes</span></div>
+        <p class="why">His page offers "fully-funded Ph.D. student positions in the areas of mobile health, mobile systems." This is Area 3 health sensing on real devices (earbuds, wearables, mmWave), but it includes building low-power hardware add-ons, which is closer to embedded work than you prefer.</p>
+        <span class="toggle">2024–2025</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2025</span><span>Argus: Multi-view egocentric human mesh reconstruction based on a stripped-down wearable mmWave add-on <span class="venue">· SenSys 2025</span></span></li>
+          <li><span class="yr">2025</span><span>MobiChem: A Low-Cost Smartphones-based Toolkit for Practical Fruit Monitoring <span class="venue">· MobiSys 2025</span></span></li>
+          <li><span class="yr">2024</span><span>PyroSense: 3D Posture Reconstruction Using Pyroelectric Infrared Sensing <span class="venue">· IMWUT 2024</span></span></li>
+          <li><span class="yr">2024</span><span>EarSE: Bringing Robust Speech Enhancement to COTS Headphones <span class="venue">· IMWUT 2024</span></span></li>
+          <li><span class="yr">2024</span><span>PiezoBud: A Piezo-Aided Secure Earbud with Practical Speaker Authentication <span class="venue">· SenSys 2024</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Source: his homepage. No 2026 papers are listed yet. Contact on page: litianx2@msu.edu.</p>
+      </div>
+    </details>
+
+    <details class="pi">
+      <summary>
+        <div class="who"><h3>Daniel Morris</h3><span class="role">Associate Professor, ECE and Biosystems &amp; Agricultural Engineering · Smart Sensing Lab (SmartS Lab)</span></div>
+        <div class="tags"><span class="tier B">TIER B</span><span class="chip plain">recruiting: unverified</span></div>
+        <p class="why">Multi-modal sensor fusion for autonomous vehicles (radar-camera, LiDAR-camera, tracking, HD maps) and agriculture. A strong Area 2 fit, but he's in ECE. His lab now appears as the Smart Sensing Lab; our earlier record called it the 3D Vision Lab.</p>
+        <span class="toggle">2024–2026</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2026</span><span>Self-Attentive Edge-Convolution Bipartite Graph Network for 3D Object Reconstruction from Point Clouds <span class="venue">· IEEE Trans. Multimedia</span></span></li>
+          <li><span class="yr">2025</span><span>RICCARDO: Radar Hit Prediction and Convolution for Camera-Radar 3D Object Detection <span class="venue">· CVPR 2025</span></span></li>
+          <li><span class="yr">2024</span><span>Self-Annotated 3D Geometric Learning for Smeared Points Removal <span class="venue">· WACV 2024</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Source: egr.msu.edu/3dvision (Smart Sensing Lab page).</p>
+      </div>
+    </details>
+
+    <details class="pi">
+      <summary>
+        <div class="who"><h3>Vishnu Naresh Boddeti</h3><span class="role">Associate Professor, CSE · Human Analysis Lab</span></div>
+        <div class="tags"><span class="tier C">TIER C</span><span class="chip">recruiting: likely</span></div>
+        <p class="why">Bias auditing of foundation models, cryptographically secure AI (homomorphic encryption) and physics-informed AI. He says he is "always looking for motivated students with strong mathematical backgrounds", which is a math-heavy profile.</p>
+        <span class="toggle">2024</span>
+      </summary>
+      <div class="body">
+        <ul class="pubs">
+          <li><span class="yr">2024</span><span>Mechanics-informed autoencoder enables automated detection and localization of unforeseen structural damage <span class="venue">· Nature Communications</span></span></li>
+        </ul>
+        <p class="muted" style="font-size:13px">Source: his homepage.</p>
+      </div>
+    </details>
+  </div>
+  <p class="muted" style="font-size:13px">Not added: Anil K. Jain (biometrics), Karthik Nandakumar (biometrics and privacy), Sijia Liu (optimization-heavy trustworthy ML), Jiliang Tang (graph ML). Xiaoming Liu, formerly at MSU, is now at UNC Chapel Hill and already in our data.</p>
+</section>
+
+<section aria-labelledby="dates">
+  <h2 id="dates"><span class="n">07</span>Fall 2027 timeline</h2>
+  <ol class="timeline">
+    <li><span class="when">Now – Nov 2026</span><span>Ask Dr. Ricanek to introduce you to Ross. Email Kong (openings) and Li (funded positions). Collect UNCW course syllabi.</span></li>
+    <li class="soft"><span class="when">Dec 30, 2026 · ECE PhD</span><span>Materials in for full consideration. Later applications are reviewed without a guarantee. The ECE page was last updated March 2022, so confirm.</span></li>
+    <li class="hard"><span class="when">Dec 31, 2026 · CSE PhD (target)</span><span>Guaranteed full consideration for university and college fellowships; college fellowships include international applicants.</span></li>
+    <li class="hard"><span class="when">Jan 15, 2027 · CSE PhD closes</span><span>Closing date for all fall applications.</span></li>
+    <li><span class="when">Aug 2027 · start</span><span>Week 2: submit your MS thesis for the qualifier, if you have one. Week 5: the deadline to request the MS credit waiver.</span></li>
+    <li class="soft"><span class="when">Fall 2028 · CSE qualifier</span><span>Offered in Fall only. Fall arrivals take it in their 3rd semester.</span></li>
+  </ol>
+</section>
+
+<section aria-labelledby="constraints">
+  <h2 id="constraints"><span class="n">08</span>Constraints and entry requirements</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Requirement</th><th>Applies to</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td><strong>GRE</strong></td><td>CSE PhD</td><td>"Highly recommended but not required." Recent admits' medians were Q 164, V 153, AW 3.0.</td></tr>
+        <tr><td><strong>GRE</strong></td><td>ECE PhD</td><td>"Required for all international applicants." Quantitative is generally above 159.</td></tr>
+        <tr><td>English test</td><td>ECE PhD</td><td>TOEFL iBT 80 (19 per section, 22 writing) or IELTS 6.5</td></tr>
+        <tr><td>English test</td><td>CSE PhD</td><td>Refers to the Graduate School's English-competency page, which wouldn't load. Confirm whether a US master's waives it.</td></tr>
+        <tr><td>GPA</td><td>Both</td><td>CSE: at least 3.2. ECE: 3.5 or better is typical for domestic applicants. Yours is 3.92.</td></tr>
+        <tr><td>Statements</td><td>Both</td><td>An Academic Statement and a Personal Statement, each at most 2 pages (12-pt Times New Roman, 1-inch margins, single-spaced)</td></tr>
+        <tr><td>References</td><td>CSE PhD</td><td>Three</td></tr>
+        <tr><td><strong>Background</strong></td><td>ECE PhD</td><td>An undergraduate degree "in ECE or a closely related field is required". ECE doesn't offer provisional admission.</td></tr>
+        <tr><td>Funding link</td><td>ECE PhD</td><td>"Admission to the department is linked to the availability of support". International students usually get an RA from a faculty member.</td></tr>
+        <tr><td>Advisor</td><td>CSE PhD</td><td>Assigned at admission. A co-advisor is allowed; at least one advisor must be CSE faculty.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="qs">
+  <h2 id="qs"><span class="n">09</span>Open questions to ask MSU</h2>
+  <ol class="qs">
+    <li><div><strong>How many of my UNCW MS credits could be waived (up to 24), and can the Theory &amp; Algorithms breadth area be waived through my MS coursework?</strong><div class="to">Ask: CSE Graduate Program Director</div></div></li>
+    <li><div><strong>Which Fall 2027 projects are open, and would deepfake or media-forensics work, or behavior in real video, fit?</strong><div class="to">Ask: Yu Kong</div></div></li>
+    <li><div><strong>Is he taking a PhD student for Fall 2027, with funding, and would he consider co-advising with Kong?</strong><div class="to">Ask: Arun Ross, via Dr. Ricanek's introduction</div></div></li>
+    <li><div><strong>Are the fully-funded mobile-health positions still open for Fall 2027?</strong><div class="to">Ask: Tianxing Li</div></div></li>
+    <li><div><strong>Which semester are CSE 803, 830, 847, 849 and 881 usually offered?</strong> The Registrar pages couldn't be read.<div class="to">Ask: CSE graduate office</div></div></li>
+    <li><div><strong>Does a CS or IS bachelor's satisfy ECE's "ECE or closely related field" rule? What are the titles of ECE 818, 821, 822, 835, 863, 864 and 884?</strong><div class="to">Ask: ECE graduate admissions</div></div></li>
+    <li><div><strong>Is an English test required for an applicant with a US master's?</strong><div class="to">Ask: CSE graduate office or the Graduate School</div></div></li>
+  </ol>
+  <div class="glance" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr))">
+    <div><span class="eyebrow">ECE graduate admissions</span><span class="copy"><code id="em1">ecegradadmission@egr.msu.edu</code><button type="button" data-copy="em1">Copy</button></span></div>
+    <div><span class="eyebrow">Tianxing Li (from his page)</span><span class="copy"><code id="em2">litianx2@msu.edu</code><button type="button" data-copy="em2">Copy</button></span></div>
+  </div>
+</section>
+
+<section aria-labelledby="src">
+  <h2 id="src"><span class="n">10</span>Sources</h2>
+  <ul class="sources">
+    <li><a href="https://www.egr.msu.edu/forms/pdfs/docs/Graduate/2026-27%20Engineering%20Graduate%20Handbook.docx" target="_blank" rel="noopener">MSU College of Engineering 2026–27 Graduate Handbook (.docx)</a>: CSE and ECE PhD requirements, breadth lists, qualifiers, waivers</li>
+    <li><a href="https://engineering.msu.edu/academics/majors-degrees/computer-science-phd" target="_blank" rel="noopener">MSU Computer Science PhD</a> · <a href="https://engineering.msu.edu/academics/majors-degrees/electrical-and-computer-engineering-phd" target="_blank" rel="noopener">MSU ECE PhD</a> · <a href="https://engineering.msu.edu/admissions/graduate-admissions" target="_blank" rel="noopener">Engineering graduate admissions</a></li>
+    <li><a href="https://cse.msu.edu/~rossarun/i-probe/" target="_blank" rel="noopener">i-PRoBe Lab (Ross)</a> · <a href="https://www.egr.msu.edu/~yukong" target="_blank" rel="noopener">Yu Kong</a> · <a href="http://cse.msu.edu/~litianx2" target="_blank" rel="noopener">Tianxing Li</a> · <a href="https://www.egr.msu.edu/3dvision/" target="_blank" rel="noopener">Smart Sensing Lab (Morris)</a> · <a href="http://vishnu.boddeti.net" target="_blank" rel="noopener">Vishnu Boddeti</a></li>
+    <li>arXiv API author queries (Ross, Kong), checked 2026-10-19</li>
+    <li><a href="https://engineering.msu.edu/academics/graduate-studies" target="_blank" rel="noopener">MSU Engineering graduate studies</a> (MS and PhD only; no professional doctorate)</li>
+  </ul>
+</section>
+
+<footer>Part of Atul Prem Patnala's Fall 2027 PhD screening. Facts come from primary sources unless labeled. MSU course descriptions and terms couldn't be read and are marked as inferred or missing. Last checked 2026-10-19.</footer>
+</div>
+
+<script>
+/* MSU courses from the 2026-27 Engineering Graduate Handbook. [code, title, credits, terms, lists, fit, math, what it covers]
+   lists: S/T/D = CSE breadth areas (System Design, Theory & Algorithms, Data Analysis); Q:<area> = ECE qualifying core.
+   math: L/M/H estimated from the title; U = unknown (no title found). Terms not retrievable -> '—'. */
+var COURSES = [
+['CSE 812','Distributed Systems','3','—','S',1,'M','Inferred from title: design and algorithms of distributed computing systems.'],
+['CSE 820','Advanced Computer Architecture','3','—','S',0,'M','Inferred from title: processor and memory-system architecture.'],
+['CSE 822','Parallel Computing','3','—','S',0,'M','Inferred from title: parallel programming models and performance.'],
+['CSE 824','Advanced Computer Networks and Communications','3','—','S',0,'M','Inferred from title: network protocols and communication systems.'],
+['CSE 825','Computer and Network Security','3','—','S',1,'M','Inferred from title: security of computers and networks.'],
+['CSE 834','Advanced Topics in Automated Vehicles','3','—','S',2,'M','Inferred from title: automated-vehicle systems; likely perception, planning and safety.'],
+['CSE 870','Advanced Software Engineering','3','—','S',0,'L','Inferred from title: large-scale software design and process.'],
+['CSE 893','Selected Topics in System Design and Analysis','3','—','S',0,'M','Variable systems topic; content changes by semester.'],
+['CSE 814','Computer Aided Verification','3','—','T',0,'H','Inferred from title: formal verification of hardware and software.'],
+['CSE 830','Design and Theory of Algorithms','3','—','T',0,'H','Inferred from title: algorithm design and analysis, proof-based.'],
+['CSE 835','Algorithmic Graph Theory','3','—','T',0,'H','Inferred from title: graph algorithms and their theory.'],
+['CSE 836','Probabilistic Models and Algorithms in Computational Biology','3','—','T',0,'H','Inferred from title: probabilistic models for biological sequence data.'],
+['CSE 860','Foundations of Computing','3','—','T',0,'H','Inferred from title: computability and complexity theory.'],
+['CSE 894','Selected Topics in Theory and Algorithms','3','—','T',0,'H','Variable theory topic; content changes by semester.'],
+['CSE 802','Pattern Recognition and Analysis','3','—','D',2,'M','Inferred from title: statistical pattern recognition and classification.'],
+['CSE 803','Computer Vision','3','—','D',2,'M','Inferred from title: image formation, features, recognition and 3D vision.'],
+['CSE 840','Computational Foundations in Artificial Intelligence','3','—','D',1,'M','Inferred from title: core computational methods behind AI.'],
+['CSE 841','Artificial Intelligence','3','—','D',2,'M','Inferred from title: search, reasoning, planning and learning.'],
+['CSE 842','Natural Language Processing','3','—','D',1,'M','Inferred from title: computational processing of human language.'],
+['CSE 845','Multidisciplinary Research Methods for the Study of Evolution','3','—','D',0,'L','Inferred from title: research methods for evolution studies.'],
+['CSE 847','Machine Learning','3','—','D',2,'M','Inferred from title: supervised and unsupervised learning methods.'],
+['CSE 848','Evolutionary Computation','3','—','D',1,'M','Inferred from title: genetic algorithms and evolutionary optimization.'],
+['CSE 849','Deep Learning','3','—','D',2,'M','Inferred from title: neural network architectures and training.'],
+['CSE 850','Advanced Topics in Adversarial Machine Learning','3','—','D',2,'M','Inferred from title: attacks on and defenses for ML models. Relevant to deepfake robustness.'],
+['CSE 851','Genetic Programming','3','—','D',0,'M','Inferred from title: evolving programs with evolutionary methods.'],
+['CSE 881','Data Mining','3','—','D',2,'M','Inferred from title: finding patterns in large datasets.'],
+['CSE 895','Selected Topics in Data Analysis and Applications','3','—','D',1,'M','Variable data-analysis topic; content changes by semester.'],
+['ECE 816','Cryptography and Network Security','3','—','Q:Computing',0,'M','Inferred from title: cryptographic methods and secure networking.'],
+['ECE 830','Embedded Cyber-Physical Systems','3','—','Q:Computing',1,'M','Inferred from title: embedded computing that interacts with physical systems.'],
+['ECE 842','Performance Modeling of Communications Networks','3','—','Q:Computing',0,'H','Inferred from title: queueing and probabilistic models of networks.'],
+['ECE 884','Title not found','3','—','Q:Computing',0,'U','Qualifying core course (Computing). Title not found in sources I could read.'],
+['ECE 818','Title not found','3','—','Q:Controls & Robotics',0,'U','Qualifying core course (Controls and Robotics). Title not found.'],
+['ECE 851','Linear Systems and Control','3','—','Q:Controls & Robotics',0,'H','Inferred from title: state-space linear systems and controller design.'],
+['ECE 835','Title not found','3','—','Q:Electromagnetics',0,'U','Qualifying core course (Electromagnetics). Title not found.'],
+['ECE 850','Electrodynamics of Plasmas','3','—','Q:Electromagnetics',0,'H','Inferred from title: plasma physics and electrodynamics.'],
+['ECE 821','Title not found','3','—','Q:Energy & Power',0,'U','Qualifying core course (Energy and Power Systems). Title not found.'],
+['ECE 822','Title not found','3','—','Q:Energy & Power',0,'U','Qualifying core course (Energy and Power Systems). Title not found.'],
+['ECE 874','Physical Electronics','3','—','Q:Materials & Devices',0,'H','Inferred from title: semiconductor physics.'],
+['ECE 875','Electronic Devices','3','—','Q:Materials & Devices',0,'H','Inferred from title: transistor and device physics.'],
+['ECE 813','Advanced VLSI Design','3','—','Q:Microelectronics',0,'M','Inferred from title: design of large digital integrated circuits.'],
+['ECE 832','Analog Integrated Circuit Design','3','—','Q:Microelectronics',0,'H','Inferred from title: analog IC design.'],
+['ECE 863','Title not found','3','—','Q:Signal Processing & Comms',0,'U','Qualifying core course (Signal Processing and Communications). Title not found in current sources.'],
+['ECE 864','Title not found','3','—','Q:Signal Processing & Comms',0,'U','Qualifying core course (Signal Processing and Communications). Title not found.'],
+['ECE 837','Computational Methods in Electromagnetics','3','—','',0,'H','Inferred from title: numerical electromagnetics.'],
+['STT 8xx','Graduate statistics course (outside Engineering)','3','—','',1,'U','Satisfies the ECE outside-Engineering course. The handbook names STT 844, 861, 862 and 875 as examples; titles not retrieved.']
+];
+var MATH = {}; COURSES.forEach(function (c) { MATH[c[0]] = c[6]; });
+var MATH_LABEL = { L: 'Low', M: 'Medium', H: 'High', U: 'Unknown' };
+var AREA = { S: 'System Design', T: 'Theory & Algorithms', D: 'Data Analysis' };
+
+function counts(c) {
+  var dept = c[0].split(' ')[0], l = c[4];
+  var cse = AREA[l] ? ['yes', 'Breadth: ' + AREA[l]] : dept === 'CSE' ? ['yes', 'CSE course'] : ['maybe', 'Counts*'];
+  var ece = l.indexOf('Q:') === 0 ? ['req', 'Qual. core (' + l.slice(2) + ')'] : c[0] === 'STT 8xx' ? ['req', 'Outside course'] : ['maybe', 'Counts*'];
+  return [cse, ece];
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
+function badge(b) { return '<span class="badge b-' + b[0] + '">' + esc(b[1]) + '</span>'; }
+
+function renderCat() {
+  var list = document.getElementById('f-list').value;
+  var q = document.getElementById('f-q').value.trim().toLowerCase(), fit = document.getElementById('f-fit').checked;
+  var math = document.getElementById('f-math').value;
+  var rows = COURSES.filter(function (c) {
+    var dept = c[0].split(' ')[0];
+    if (list.indexOf('dept:') === 0) { if (list.slice(5).split(',').indexOf(dept) < 0) return false; }
+    else if (list === 'Q') { if (c[4].indexOf('Q:') !== 0) return false; }
+    else if (list !== 'all' && c[4] !== list) return false;
+    if (fit && c[5] !== 2) return false;
+    if (math && math.indexOf(c[6]) < 0) return false;
+    if (q && (c[0] + ' ' + c[1] + ' ' + c[7]).toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+  document.getElementById('cat-body').innerHTML = rows.map(function (c) {
+    var k = counts(c);
+    return '<tr><td class="code">' + esc(c[0]) + '</td><td><strong>' + esc(c[1]) + '</strong><div class="desc">' + esc(c[7]) + '</div></td><td class="num">' + esc(c[2]) + '</td><td class="terms">' + esc(c[3]) +
+      '</td><td><span class="math math-' + c[6] + '">' + MATH_LABEL[c[6]] + '</span></td><td>' + badge(k[0]) + '</td><td>' + badge(k[1]) + '</td><td>' +
+      (c[5] === 2 ? '<span class="fit2">Strong</span>' : c[5] === 1 ? '<span class="fit1">Related</span>' : '') + '</td></tr>';
+  }).join('') || '<tr><td colspan="8" class="muted">No courses match these filters. Clear the search or pick "All courses".</td></tr>';
+  document.getElementById('f-count').textContent = rows.length + ' of ' + COURSES.length + ' courses';
+}
+['f-list', 'f-fit', 'f-math'].forEach(function (id) { document.getElementById(id).addEventListener('change', renderCat); });
+document.getElementById('f-q').addEventListener('input', renderCat);
+renderCat();
+
+/* Plans: [code, title, credits, counts-as, must-take]; m = milestone; r = research. Terms are assumed (not verified). */
+var PLANS = {
+  cse: {
+    intro: '30 coursework credits (10 courses, all from the breadth lists, covering all three areas) + 24 credits of CSE 999 = 54. If your MS waiver is approved, most of these become optional; keep the "must-take" ones.',
+    transfer: 'With the waiver (up to 24 credits), you could take as few as 2 courses. The breadth areas must still be covered or waived, and the Theory & Algorithms course (CSE 830 here, High math) is the one to try to waive. Semester placement is assumed; confirm terms.',
+    totals: ['Coursework 30', 'CSE 999 24+', 'Total 54+'],
+    sems: [
+      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['CSE 847', 'Machine Learning', 3, 'Breadth: Data Analysis', 1], ['CSE 803', 'Computer Vision', 3, 'Breadth: Data Analysis', 1], ['CSE 834', 'Advanced Topics in Automated Vehicles', 3, 'Breadth: System Design', 0]], m: ['Week 2: MS thesis for qualifier (if any)', 'Week 5: MS credit-waiver request due', 'Attend 75% of colloquium talks (years 1–2)'] },
+      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['CSE 849', 'Deep Learning', 3, 'Breadth: Data Analysis', 1], ['CSE 830', 'Design and Theory of Algorithms', 3, 'Breadth: Theory (required area)', 0], ['CSE 802', 'Pattern Recognition and Analysis', 3, 'Breadth: Data Analysis', 0]] },
+      { t: 'Fall 2028', y: 'Year 2', s: 'fall', c: [['CSE 881', 'Data Mining', 3, 'Breadth: Data Analysis', 0], ['CSE 850', 'Adversarial Machine Learning', 3, 'Breadth: Data Analysis', 0]], m: ['Qualifying exam (Fall only; semester 3)', 'Guidance committee formed by semester 3', 'Breadth complete (MS holders: by semester 3)'] },
+      { t: 'Spring 2029', y: 'Year 2', s: 'spring', c: [['CSE 841', 'Artificial Intelligence', 3, 'Breadth: Data Analysis', 0], ['CSE 825', 'Computer and Network Security', 3, 'Breadth: System Design', 0]], r: ['CSE 999 dissertation research'] },
+      { t: 'Fall 2029 – Spring 2030', y: 'Year 3', s: 'fall', c: [], r: ['CSE 999 dissertation research'], m: ['Comprehensive exam (proposal): ideally within 2 years of the qualifier, by end of year 4'] },
+      { t: 'Fall 2030 – Spring 2031', y: 'Year 4', s: 'spring', c: [], r: ['CSE 999 dissertation research'], m: ['Final defense: target spring 2031 (the handbook says typically by year 5)'] }
+    ]
+  },
+  ece: {
+    intro: '36 coursework credits (12 courses: 3 qualifying core from 2+ areas, 1 outside-Engineering course, 8 more 800-level courses) + 24 credits of ECE 999 = 60. This plan avoids the hardware and physics core courses where possible.',
+    transfer: 'The guidance committee can count prior graduate courses, so your MS may reduce the 36. None of the qualifying core options is a close fit; the signal-processing titles (ECE 863/864) weren\'t found, so ask ECE. Semester placement is assumed.',
+    totals: ['Coursework 36', 'ECE 999 24+', 'Total 60+'],
+    sems: [
+      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['ECE 830', 'Embedded Cyber-Physical Systems', 3, 'Qual. core (Computing)', 1], ['CSE 847', 'Machine Learning', 3, 'Counts*', 1], ['CSE 803', 'Computer Vision', 3, 'Counts*', 1]], m: ['Attend 7 graduate seminars in year 1'] },
+      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['ECE 816', 'Cryptography and Network Security', 3, 'Qual. core (Computing)', 1], ['ECE 851', 'Linear Systems and Control', 3, 'Qual. core (Controls)', 1], ['CSE 849', 'Deep Learning', 3, 'Counts*', 0]], m: ['Qualifier Part A: 3 core courses, average ≥ 3.5'] },
+      { t: 'Fall 2028', y: 'Year 2', s: 'fall', c: [['STT 8xx', 'Graduate statistics course', 3, 'Outside Engineering', 1], ['CSE 802', 'Pattern Recognition and Analysis', 3, 'Counts*', 0], ['CSE 881', 'Data Mining', 3, 'Counts*', 0]], m: ['Qualifier Part B: research project report + oral'] },
+      { t: 'Spring 2029', y: 'Year 2', s: 'spring', c: [['CSE 850', 'Adversarial Machine Learning', 3, 'Counts*', 0], ['CSE 841', 'Artificial Intelligence', 3, 'Counts*', 0], ['CSE 834', 'Advanced Topics in Automated Vehicles', 3, 'Counts*', 0]], m: ['Both qualifier parts done within 2 years'] },
+      { t: 'Fall 2029 – Spring 2031', y: 'Years 3–4', s: 'fall', c: [], r: ['ECE 999 dissertation research'], m: ['Comprehensive exam (proposal) ~year 3; defense target spring 2031'] }
+    ]
+  }
+};
+
+var LEGEND = '<div class="plan-legend"><div><strong>Counts as</strong>: which requirement the course fills. <em>Breadth: area</em> = CSE breadth (18 credits, one per area); <em>Qual. core</em> = ECE qualifying core course; <em>Counts*</em> = 800-level coursework with committee approval.</div><div><span class="keep">must-take</span> is a separate tag: my priority for you. Take it even if your MS credits are waived. A course can be both, e.g. a Data Analysis breadth course that is also must-take.</div></div>';
+function renderPlan(key) {
+  var p = PLANS[key];
+  var html = '<p class="plan-note">' + esc(p.intro) + '</p><div class="totals">' + p.totals.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' + LEGEND + '<div class="sems">';
+  p.sems.forEach(function (s) {
+    var cr = s.c.reduce(function (a, c) { return a + c[2]; }, 0);
+    html += '<div class="sem ' + s.s + '"><h4>' + esc(s.t) + '<small>' + esc(s.y) + (cr ? ' · ' + cr + ' cr' : '') + '</small></h4>';
+    s.c.forEach(function (c) {
+      html += '<div class="crs"><span class="code">' + esc(c[0]) + '</span><span>' + esc(c[1]) + (c[4] ? '<span class="keep">must-take</span>' : '') + '</span><span class="cr">' + c[2] + '</span><span class="why">Counts as: ' + esc(c[3]) + (MATH[c[0]] ? ' · Math: ' + MATH_LABEL[MATH[c[0]]] : '') + '</span></div>';
+    });
+    (s.r || []).forEach(function (r) { html += '<div class="mile res">' + esc(r) + '</div>'; });
+    (s.m || []).forEach(function (m) { html += '<div class="mile">' + esc(m) + '</div>'; });
+    html += '</div>';
+  });
+  html += '</div><p class="muted" style="font-size:13px">' + esc(p.transfer) + '</p>';
+  document.getElementById('plan-panel').innerHTML = html;
+  document.getElementById('plan-panel').setAttribute('aria-labelledby', 't-' + key);
+}
+document.querySelectorAll('.tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+    renderPlan(tab.getAttribute('data-plan'));
+  });
+});
+renderPlan('cse');
+
+document.querySelectorAll('[data-copy]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.getAttribute('data-copy'));
+    var text = el.textContent;
+    function done(ok) { btn.textContent = ok ? 'Copied' : 'Select'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); }
+    function selectIt() { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+    try { navigator.clipboard.writeText(text).then(function () { done(true); }, function () { selectIt(); done(false); }); }
+    catch (e) { selectIt(); done(false); }
+  });
+});
+</script>
+
+</body>
+</html>
