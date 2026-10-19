@@ -656,7 +656,7 @@ var COURSES = [
 ['ENGR 665','Stochastic Simulation in Engineering Applications','3','Spring','',1,'H','Probabilistic modeling of uncertainty, stochastic simulation and Bayesian model updating.'],
 ['ENGR 667','Advanced Model-Based Systems Engineering','3','Spring','',0,'L','Formal system architecture modeling (same content as SYSE 667).'],
 ['MECH 513','Simulation Modeling and Experimentation','3','—','SE',0,'M','Description not retrieved from the catalog.'],
-['CS 501','Introduction to Research in Computer Science','1','Fall, Spring, Summer','',1,'L','Skills for graduate research: presenting, writing and reading papers.'],
+['CS 501','Introduction to Research in Computer Science','1','Fall, Spring, Summer','',1,'L','Graduate research skills plus faculty research rotations. 1 credit, "may be taken twice for credit"; the CS PhD needs 2.'],
 ['CS 510','Image Computation','4','Spring','G1',2,'M','Image generation and interpretation: rendering, ray tracing, geometric transforms, image manipulation.'],
 ['CS 514','Software Product and Process Evaluation','4','Fall','G3',0,'L','Software process modeling, metrics, testing and verification.'],
 ['CS 520','Analysis of Algorithms','4','Spring','G1',0,'H','Asymptotic and problem complexity, the Master Method, parallel algorithms. Proof-based.'],
@@ -805,11 +805,11 @@ var PLANS = {
   },
   cs: {
     intro: 'CS 501 (2) + one course from each breadth group (12) + 12 more CS credits + CS 793 (8) + 3 outside credits = 37 coursework credits, then 35 dissertation credits = 72. With an MS you can transfer up to 30 credits and petition to waive breadth groups.',
-    transfer: 'CS 501 is listed at 1 credit, and the PhD asks for 2, so it is probably taken twice. Confirm with the department. The timing of the departmental research exam isn\'t published; the PhD Research Exam procedure document has it.',
+    transfer: 'CS 501 is a 1-credit course that "may be taken twice for credit", and the PhD requires 2 credits, so you take it in Fall and Spring of year 1. Each enrollment is a research rotation with faculty, a structured way to try two groups before settling on an advisor. The timing of the departmental research exam isn\'t published; the PhD Research Exam procedure document has it.',
     totals: ['Coursework 37', 'Dissertation 35', 'Total 72'],
     sems: [
-      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['CS 501', 'Intro to Research in CS', 1, 'Required', 1], ['CS 545', 'Machine Learning', 4, 'Group 1', 1], ['CS 535', 'Big Data', 4, 'Group 2', 1]], m: ['Advisor appointed before first registration'] },
-      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['CS 501', 'Intro to Research in CS', 1, 'Required', 1], ['CS 510', 'Image Computation', 4, 'CS course', 0], ['CS 540', 'Artificial Intelligence', 4, 'CS course', 0]] },
+      { t: 'Fall 2027', y: 'Year 1', s: 'fall', c: [['CS 501', 'Intro to Research in CS (rotation 1)', 1, 'Required', 1], ['CS 545', 'Machine Learning', 4, 'Group 1', 1], ['CS 535', 'Big Data', 4, 'Group 2', 1]], m: ['Advisor appointed before first registration'] },
+      { t: 'Spring 2028', y: 'Year 1', s: 'spring', c: [['CS 501', 'Intro to Research in CS (rotation 2)', 1, 'Required', 1], ['CS 510', 'Image Computation', 4, 'CS course', 0], ['CS 540', 'Artificial Intelligence', 4, 'CS course', 0]] },
       { t: 'Fall 2028', y: 'Year 2', s: 'fall', c: [['CS 556', 'Computer Security', 4, 'Group 3', 1], ['CS 542', 'Natural Language Processing', 4, 'CS course', 0], ['ENGR 535', 'Modeling Human Systems Behavior', 3, 'Outside', 0]] },
       { t: 'Spring 2029', y: 'Year 2', s: 'spring', c: [['CS 793', 'Research Seminar in CS', 4, 'Required', 1]], r: ['CS 799 dissertation'], m: ['Departmental research exam (timing: confirm)', 'Committee + GS Form 6 before semester 4'] },
       { t: 'Fall 2029', y: 'Year 3', s: 'fall', c: [['CS 793', 'Research Seminar in CS', 4, 'Required', 1]], r: ['CS 799 dissertation'], m: ['Preliminary exam (proposal), target'] },
